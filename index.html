@@ -152,7 +152,7 @@
                 minZoom: 8
             });
 
-            L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png', {
+            L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png', {
                 attribution: 'CARTO'
             }).addTo(map);
 
@@ -214,6 +214,8 @@
                             cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;} #layer[cd_prov = '15']{polygon-fill: #B10026;} #layer[cd_prov = '36']{polygon-fill: #E31A1C;} #layer[cd_prov = '27']{polygon-fill: #FC4E2A;} #layer[cd_prov = '32'] {polygon-fill: #FD8D3C;}",
                             interactivity: ['ds_prov']
                         });
+
+
                         return true;
                     }
                 };

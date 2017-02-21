@@ -1,11 +1,40 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="lun, 20 feb 2017 17:46:37 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title></title>
+
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+<!DOCTYPE html>
 <html>
     <head>
         <title>MAPA INICIAL</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <!--LIBRERIAS GRÁFICOS -->
+
+        <script src="a_data/d3.js" charset="utf-8"></script>
+        <link href="a_data/nv.css" rel="stylesheet">
+        <script src="a_data/nv.js"></script>
+        <meta name="viewport" content="initial-scale = 1, user-scalable = no">
+
+        <!--LIBRERIAS COMUNES -->
+        <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+        <!-- include cartodb.js library -->
+        <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+
+        <!--ESTILO DEL MAPA Y SUS HERRAMIENTAS -->
         <style>
-            /* Css. Mapa */
 
             html,
             body,
@@ -14,19 +43,26 @@
                 padding: 0;
                 margin: 0;
             }
-            /* Css. Selector SQL */
+             /*
+            .ui-autocomplete-loading {
+             background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
+            }  */
 
-            #selector_menu {
-                position: absolute;
-                top: 20px;
-                left: 50px;
-                z-index: 9000;
+        </style>
+
+            <!--ESTILO DE LOS BOTONES -->
+         <style>
+           #selector_menu {
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            z-index: 9000;
             }
 
             #menu {
                 position: absolute;
-                top: 400px;
-                right: 10px;
+                top: 300px;
+                left: 10px;
                 width: 100px;
                 height: 60px;
                 background: transparent;
@@ -56,32 +92,41 @@
             }
 
             #legend{
-                top: 79px;
-                left: 12px;
+                top: 200px;
+                right: 10px;
                 bottom: inherit;
                 right: inherit;
             }
         </style>
+
+        <!--ESTILO DE LOS GRÁFICOS -->
         <style>
-            .ui-autocomplete-loading {
-                background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
-            }
+        #chart {
+                height: 200px;
+                margin: 5px;
+                width: 300px;
+                position: absolute;
+                top: 80px;
+                right:10px;
+                z-index: 1;
+         }
         </style>
-        <!-- include cartodb css  -->
-        <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
-        <!-- include cartodb.js library -->
-        <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 
         <!-- Buscar auto completar -->
         <script>
         </script>
     </head>
     <body>
+
+        <div id="chart">
+        </div>
+
+
+        <!-- DIV MAPA -->
+
         <div id="map" class="mapatita" style="position: relative; cursor: auto;" tabindex="0"></div>
 
-        <!-- Create a custom legend -->
+        <!-- LEYENDA -->
         <div class='cartodb-legend category' style="display: none;" id="legend">
             <div class="legend-title" style="color:#284a59">Provincias</div>
             <ul>
@@ -92,210 +137,300 @@
             </ul>
         </div>
 
+        <!-- DIV SELECTORES-->
         <div id="selector_menu">
-            <select id="province_selector">
-				<option value="Todas">Todas</option>
-			</select>
-            <select id="municipality_selector">
-			</select>
+            <table border="0" width="100px"   align="center" cellpadding="2px"  >
+                <tr>
+                    <td colspan="2" style="f"><p style="color: white">Filtro Geográfico</p></td>
+                </tr>
+                <tr>
+                    <td> <p style="color: white">Provincias</p></td>
+                    <td>
+                        <select id="province_selector">
+                            <option value="Todas">Todas</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p style="color: white">Municipios</p></td>
+                        <td>
+                        <select id="municipality_selector"> </select>
+                    </td>
+                </tr>
+            </table>
         </div>
 
+       <!-- DIV BOTONES-->
         <div id="menu">
             <a href="#provincias" id="provincias" class="button provincias">Provincias</a>
             <a href="#coro" id="coro" class="button coro">Coropletas</a>
             <a href="#zoom" id="zoom" class="button zoom">Zoom</a>
         </div>
 
+
+         <!-- Recupera la provincia de la selección-->
+
         <script>
-            // Global variables
-            var sql = new cartodb.SQL({ user: 'minsait' });
-            var table_name = "test_data";
-            var provinces = [];
-            var municipalities = [];
-            var geo_filter = "";
-            var sublayer;
-
-            var refresh = function () {
-                sublayer.setSQL("select * from " + table_name + geo_filter);
-            };
-
-            var update_municipality_selector = function () {
-                $("#municipality_selector").html('<option value="Todos">Todos</option>');
-
-                sql.execute("select ds_muni from {{table_name}}" + geo_filter + " group by ds_muni order by ds_muni", {table_name: table_name})
-                .done(function (data) {
-                    municipalities = [];
-                    for (var i = 0; i < data.rows.length; i++) {
-                        municipalities.push(data.rows[i].ds_muni);
-                        $("#municipality_selector").append('<option value="' + data.rows[i].ds_muni + '">' + data.rows[i].ds_muni + '</option>');
-                    }
-                })
-                .error(function(errors) {
-                    console.log("errors:" + errors);
-                });
-            };
-
-            function initAutocomplete() {
-                function log(message) {
-                    $("<div>").text(message).prependTo("#log");
-                    $("#log").scrollTop(0);
-                }
-
-                $(".cartodb-searchbox .text").autocomplete({
-                    source: function(request, response) {
-                        var s;
-                        sql.execute("select distinct ds_muni, ds_prov from {{table_name}} where ds_muni ilike '{{request_term}}%'", {request_term: request.term}).done(function(data) {
-                            response(data.rows.map(function(r) {
-                                return {
-                                    label: r.ds_muni + ', ' + r.ds_prov,
-                                    value: r.ds_muniunit
-                                };
-                            }));
-                        });
-                    },
-                    minLength: 2,
-                    select: function(event, ui) {
-                        log(ui.item ?
-                            "Selected: " + ui.item.value :
-                            "Nothing selected, input was " + this.value);
-                    }
-                });
-            }
-
-            // Map initialization
-            var map = L.map('map', {
-                zoomControl: true,
-                center: [42.725, -7.889],
-                zoom: 8,
-                minZoom: 8
-            });
-
-            L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png', {
-                attribution: 'CARTO'
-            }).addTo(map);
-
-            cartodb.createLayer(map, {
-                user_name: 'minsait',
-                type: 'cartodb',
-
-                sublayers: [{
-                    sql: 'select * from galicia',
-                    cartocss: '#layer { polygon-fill: #F00; polygon-opacity: 0.3; line-color: #F00; }',
-                }]
-            },{https:true})
-            .addTo(map)
-            .done(function(layer) {
-                layer.setInteraction(true);
-
-                sublayer = layer.getSubLayer(0);
-
-                //BUSCAR
-                var search_overlay = cdb.vis.Overlay.create('search', map.viz, {});
-                search_overlay.show();
-                $('#map').append(search_overlay.render().el);
-                initAutocomplete();
-                //FIN BUSCAR
-
-                //CAJA
-                var infoBox = layer.leafletMap.viz.addOverlay({
-                    type: 'infobox',
-                    layer: layer,
-                    template: '<div class="cartodb-tooltip-content-wrapper"><h2>{{name}}</h2> <h3>Provincia</h3> <p>{{ds_prov}}<span> </span></p> </div>',
-                    width: 150,
-                    position: 'bottom|left'
-                });
-                $('box').append(infoBox.render().el);
-                //FIN CAJA
+        /*
+        var search_text = $( "#province_selector" ).change(function() {
+            var Recg_prov = ( search_text .val())
+            alert(Recg_prov);
+        });
+        */
 
 
-                // xxx
+        // GLOBALES
 
-                //we define the queries that will be performed when we click on the buttons, by modifying the SQL of our layer
-                var LayerActionsA = {
-                    provincias: function() {
-                        sublayer.set({
-                            cartocss: "#layer{polygon-fill: #FE2E2E; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;}",
-                            interactivity: ['ds_prov', 'ds_muni']
-                        });
-                        return true;
-                    },
+        var sql = new cartodb.SQL({ user: 'minsait' });
+        var table_name = "test_data";
+        var provinces = [];
+        var municipalities = [];
+        var geo_filter = "";
+        var sublayer;
+        var nvChart;
 
-                    zoom: function() {
-                        map.setView([42.725, -7.889], 8, {
-                            animation: true
-                        });
+        /* Carga del mapa */
+        var map = L.map('map', {
+            zoomControl: true,
+            center: [42.725, -7.889],
+            zoom: 8,
+            minZoom: 8
+        });
 
-                        return true;
-                    },
-                    coro: function() {
-                        sublayer.set({
-                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;} #layer[cd_prov = '15']{polygon-fill: #B10026;} #layer[cd_prov = '36']{polygon-fill: #E31A1C;} #layer[cd_prov = '27']{polygon-fill: #FC4E2A;} #layer[cd_prov = '32'] {polygon-fill: #FD8D3C;}",
-                            interactivity: ['ds_prov']
-                        });
-                        $('#legend').show();
+        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png', {
+            attribution: 'CARTO'
+        }).addTo(map);
 
 
-                        return true;
-                    }
-                };
 
-                $('.button').click(function() {
-                    $('.button').removeClass('selected');
-                    $(this).addClass('selected');
-                    $('#legend').hide();
-                    LayerActionsA[$(this).attr('id')]();
-                });
+        /* FUNCIONES */
 
+        var refresh = function () {
+            sublayer.setSQL("select * from " + table_name + geo_filter);
+            refreshGraph();
+        };
 
-                // apply the custom infowindow
-                // add interactivity only to the sublayer
+        var update_municipality_selector = function () {
+            $("#municipality_selector").html('<option value="Todos">Todos</option>');
 
-                console.log(layer.getSubLayer(0));
-
-                layer.getSubLayer(0).on('featureClick',
-                    function(e, pos, latlng, data) {
-                        console.log(data);
-                    });
-                var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['ds_prov', 'ds_muni', 'ds_comarca', 'ds_concello']);
-            });
-
-            // Build province selector
-            sql.execute("select ds_prov from {{table_name}} group by ds_prov order by ds_prov", {table_name: table_name})
+            sql.execute("select ds_muni from {{table_name}}" + geo_filter + " group by ds_muni order by ds_muni", {table_name: table_name})
             .done(function (data) {
+                municipalities = [];
                 for (var i = 0; i < data.rows.length; i++) {
-                    provinces.push(data.rows[i].ds_prov);
-                    $("#province_selector").append('<option value="' + data.rows[i].ds_prov + '">' + data.rows[i].ds_prov + '</option>');
+                    municipalities.push(data.rows[i].ds_muni);
+                    $("#municipality_selector").append('<option value="' + data.rows[i].ds_muni + '">' + data.rows[i].ds_muni + '</option>');
                 }
             })
             .error(function(errors) {
                 console.log("errors:" + errors);
             });
+        };
 
-            // Build municipality selector
+        function initAutocomplete() {
+            function log(message) {
+                $("<div>").text(message).prependTo("#log");
+                $("#log").scrollTop(0);
+            }
+
+            $(".cartodb-searchbox .text").autocomplete({
+                source: function(request, response) {
+                    var s;
+                    sql.execute("select distinct ds_muni, ds_prov from {{table_name}} where ds_muni ilike '{{request_term}}%'", {request_term: request.term}).done(function(data) {
+                        response(data.rows.map(function(r) {
+                            return {
+                                label: r.ds_muni + ', ' + r.ds_prov,
+                                value: r.ds_muniunit
+                            };
+                        }));
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    log(ui.item ?
+                        "Selected: " + ui.item.value :
+                        "Nothing selected, input was " + this.value);
+                }
+            });
+        }
+
+        //Each bar represents a single discrete quantity.
+        function parseData(data) {
+            console.log('parseData')
+            // console.log(data)
+            var output = {
+                key:"Main title",
+                values:[]
+            };
+
+            data.rows.forEach(function(item){
+                output.values.push({
+                    label: item.ds_prov,
+                    value: item.pb_pob15
+                })
+            });
+            //We need to wrap output as an array!
+            return [output];
+        }
+
+        var refreshGraph = function(){
+           //sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} where ds_prov ilike '" +  Recg_prov + "'"), {table_name: table_name})
+           sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} " + geo_filter, {table_name: table_name})
+          .done(function(data) {
+                nv.addGraph(function() {
+                    var chart = nv.models.discreteBarChart()
+                        .color(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"])
+                        .x(function(d) { return d.label })    //Specify the data accessors.
+                        .y(function(d) { return d.value })
+                        .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
+                        .tooltips(true)        //Don't show tooltips
+                       // .showValues(true)       //...instead, show the bar value right on top of each bar.
+                        .showXAxis(true)
+                        ;
+
+
+                    d3.select('#chart svg').remove();
+                    d3.select('#chart').append('svg')
+                        .datum(parseData(data))
+                        .call(chart);
+
+                    nv.utils.windowResize(chart.update);
+
+                    return chart;
+                });
+          });
+        }
+
+
+
+        /* Carga de la capa de CARTO */
+        cartodb.createLayer(map, {
+            user_name: 'minsait',
+            type: 'cartodb',
+
+            sublayers: [{
+                sql: 'select * from galicia',
+                cartocss: '#layer { polygon-fill: #F00; polygon-opacity: 0.3; line-color: #F00; }',
+            }]
+        },{https:true})
+        .addTo(map)
+        .done(function(layer) {
+            layer.setInteraction(true);
+
+            sublayer = layer.getSubLayer(0);
+
+            //BUSCAR
+            var search_overlay = cdb.vis.Overlay.create('search', map.viz, {});
+            search_overlay.show();
+            $('#map').append(search_overlay.render().el);
+            initAutocomplete();
+
+
+            //CAJA DE INFORMACIÓN GENERAL ON OVER
+            var infoBox = layer.leafletMap.viz.addOverlay({
+                type: 'infobox',
+                layer: layer,
+                template: '<div class="cartodb-tooltip-content-wrapper"><h2>{{name}}</h2> <h3>Provincia</h3> <p>{{ds_prov}}<span> </span></p> </div>',
+                width: 150,
+                position: 'bottom|left'
+            });
+            $('box').append(infoBox.render().el);
+
+
+
+            //BOTONES DE SELECCIÓN DE CAPAS
+            // xxx
+
+            //we define the queries that will be performed when we click on the buttons, by modifying the SQL of our layer
+            var LayerActionsA = {
+                provincias: function() {
+                    sublayer.set({
+                        cartocss: "#layer{polygon-fill: #FE2E2E; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;}",
+                        interactivity: ['ds_prov', 'ds_muni']
+                    });
+                    return true;
+                },
+
+                zoom: function() {
+                    map.setView([42.725, -7.889], 8, {
+                        animation: true
+                    });
+
+                    return true;
+                },
+                coro: function() {
+                    sublayer.set({
+                        cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;} #layer[cd_prov = '15']{polygon-fill: #B10026;} #layer[cd_prov = '36']{polygon-fill: #E31A1C;} #layer[cd_prov = '27']{polygon-fill: #FC4E2A;} #layer[cd_prov = '32'] {polygon-fill: #FD8D3C;}",
+                        interactivity: ['ds_prov']
+                    });
+                    $('#legend').show();
+
+
+                    return true;
+                }
+            };
+
+            $('.button').click(function() {
+                $('.button').removeClass('selected');
+                $(this).addClass('selected');
+                $('#legend').hide();
+                LayerActionsA[$(this).attr('id')]();
+            });
+
+           console.log(layer.getSubLayer(0));
+
+            layer.getSubLayer(0).on('featureClick',
+                function(e, pos, latlng, data) {
+                    console.log(data);
+                });
+            var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['ds_prov', 'ds_muni', 'ds_comarca', 'ds_concello']);
+
+            refreshGraph();
+        }); // Fin de la carga del mapa
+
+
+        /* CARGA DEL SELECTOR DE PROVINCIAS */
+        sql.execute("select ds_prov from {{table_name}} group by ds_prov order by ds_prov", {table_name: table_name})
+        .done(function (data) {
+            for (var i = 0; i < data.rows.length; i++) {
+                provinces.push(data.rows[i].ds_prov);
+                $("#province_selector").append('<option value="' + data.rows[i].ds_prov + '">' + data.rows[i].ds_prov + '</option>');
+            }
+
+        })
+        .error(function(errors) {
+            console.log("errors:" + errors);
+        });
+
+        /* CARGA DEL SELECTOR DE MUNICIPIOS */
+        update_municipality_selector();
+
+
+        /* EVENTOS SELECTORES */
+        $('#province_selector').change(function() {
+            var province = $(this).val();
+            if (province == "Todas") {
+                geo_filter = "";
+            } else {
+                geo_filter = " where ds_prov = '" + $(this).val() + "'";
+            }
+            refresh();
             update_municipality_selector();
+        });
 
-            // Selector changes
-            $('#province_selector').change(function() {
-                var province = $(this).val();
-                if (province == "Todas") {
-                    geo_filter = "";
-                } else {
-                    geo_filter = " where ds_prov = '" + $(this).val() + "'";
-                }
+        $('#municipality_selector').change(function() {
+            var municipality = $(this).val();
+            if (municipality == "Todos") {
+                geo_filter = "";
                 refresh();
-                update_municipality_selector();
-            });
+            } else {
+                geo_filter = " where ds_muni = '" + $(this).val() + "'";
+                refresh();
+            }
+        });
 
-            $('#municipality_selector').change(function() {
-                var municipality = $(this).val();
-                if (municipality == "Todos") {
-                    geo_filter = "";
-                    refresh();
-                } else {
-                    geo_filter = " where ds_muni = '" + $(this).val() + "'";
-                    refresh();
-                }
-            });
-        </script>
+
+    </script>
+
+
     </body>
 </html>

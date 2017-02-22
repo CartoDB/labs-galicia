@@ -40,6 +40,7 @@
             body,
             #map {
                 height: 100%;
+                width: 92%;
                 padding: 0;
                 margin: 0;
             }
@@ -59,36 +60,36 @@
             z-index: 9000;
             }
 
-            #menu {
+           #menu {
                 position: absolute;
-                top: 300px;
-                left: 10px;
-                width: 100px;
-                height: 60px;
+                top: 240px;
+                right: 275px;
+                width: 80px;
+                height: 10px;
                 background: transparent;
                 z-index: 10;
             }
 
             #menu a {
-                margin: 15px 10px 0 0;
-                float: right;
-                vertical-align: baseline;
-                width: 70px;
-                padding: 10px;
-                text-align: center;
-                font: bold 11px "Helvetica", Arial;
-                line-height: normal;
-                color: #555;
-                border-radius: 4px;
-                border: 1px solid #777777;
-                background: #ffffff;
-                text-decoration: none;
-                cursor: pointer;
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color:#8B0000;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 3px #999;
+            width: 60px;
+            padding: 10px;
             }
 
             #menu a.selected,
             #menu a:hover {
-                color: #F84F40;
+                background-color: #556B2F;
             }
 
             #legend{
@@ -97,20 +98,20 @@
                 bottom: inherit;
                 right: inherit;
             }
-        </style>
+            </style>
 
         <!--ESTILO DE LOS GRÁFICOS -->
         <style>
-        #chart {
+            #chart {
                 height: 200px;
                 margin: 5px;
                 width: 300px;
                 position: absolute;
-                top: 80px;
+                top: 10px;
                 right:10px;
                 z-index: 1;
          }
-        </style>
+            </style>
 
         <!-- Buscar auto completar -->
         <script>
@@ -118,22 +119,64 @@
     </head>
     <body>
 
-        <div id="chart">
-        </div>
+        <div id="chart"></div>
 
 
         <!-- DIV MAPA -->
-
-        <div id="map" class="mapatita" style="position: relative; cursor: auto;" tabindex="0"></div>
+        <div id="map" class="mapita" style="position: relative; cursor: auto;" tabindex="0"></div>
 
         <!-- LEYENDA -->
-        <div class='cartodb-legend category' style="display: none;" id="legend">
-            <div class="legend-title" style="color:#284a59">Provincias</div>
+        <div class='cartodb-legend density' style="display: none;" id="legend1">
+            <div class="legend-title" style="color:#284a59">Ind. Confianza Ciudadano</div>
             <ul>
-                <li><div class="bullet" style="background-color:#8E0320"></div>A Courña</li>
-                <li><div class="bullet" style="background-color:#C84023"></div>Lugo</li>
-                <li><div class="bullet" style="background-color:#C97130"></div>Ourense</li>
-                <li><div class="bullet" style="background-color:#B41618"></div>Pontevedra</li>
+                <li class="min"> Muy Baja </li>
+                <li class="max"> Muy Alta </li>
+
+                <li class="graph leg" style="border-radius: 0; border:none">
+                    <div class="colors">
+                        <div class="quartile" style="background-color:#F50024"></div>
+                        <div class="quartile" style="background-color:#F53D36"></div>
+                        <div class="quartile" style="background-color:#F57A40"></div>
+                        <div class="quartile" style="background-color:#F5B869"></div>
+                        <div class="quartile" style="background-color:#F5F514"></div>
+                     </div>
+                     <div class="colors" style="font-weight:normal; text-align: center">
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+                     </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class='cartodb-legend category' style="display: none;" id="legend2">
+            <div class="legend-title" style="color:#284a59">Capa2</div>
+            <ul>
+                <li><div class="bullet" style="background-color:#FFFF00">
+                <li><div class="bullet" style="background-color:#C84023">
+                <li><div class="bullet" style="background-color:#C97130">
+                <li><div class="bullet" style="background-color:#B41618">
+            </ul>
+        </div>
+
+        <div class='cartodb-legend category' style="display: none;" id="legend3">
+            <div class="legend-title" style="color:#284a59">Jovenes</div>
+            <ul>
+                <li><div class="bullet" style="background-color:#191970"></div>JOVEN</li>
+                <li><div class="bullet" style="background-color:#ADD8E6"></div>NO JOVEN</li>
+
+            </ul>
+        </div>
+
+        <div class='cartodb-legend category' style="display: none;" id="legend4">
+            <div class="legend-title" style="color:#284a59">Voto Mayoritario '16</div>
+            <ul>
+                <li><div class="bullet" style="background-color:#00C5FF"></div>PP</li>
+                <li><div class="bullet" style="background-color:#FF0000"></div>PSOE</li>
+                <li><div class="bullet" style="background-color:#C500FF"></div>MAREAS</li>
+                <li><div class="bullet" style="background-color:#004DA8"></div>BNG</li>
             </ul>
         </div>
 
@@ -147,7 +190,7 @@
                     <td> <p style="color: white">Provincias</p></td>
                     <td>
                         <select id="province_selector">
-                            <option value="Todas">Todas</option>
+                            <option value="A Coruña','Lugo','Pontevedra','Ourense">Todas</option>
                         </select>
                     </td>
                 </tr>
@@ -157,27 +200,54 @@
                         <select id="municipality_selector"> </select>
                     </td>
                 </tr>
+                  <tr>
+                    <td colspan="2" style="f"><p style="color: white">Filtro Prospección</p></td>
+                </tr>
+                <tr>
+                    <td> <p style="color: white">Población</p></td>
+                    <td>
+                        <select id="poblacion_selector">
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p style="color: white">Vulnerabilidad</p></td>
+                        <td>
+                        <select id="vulnera_selector">
+
+                        </select>
+                    </td>
+                </tr>
             </table>
         </div>
 
        <!-- DIV BOTONES-->
+       <!-- DIV BOTONES-->
         <div id="menu">
-            <a href="#provincias" id="provincias" class="button provincias">Provincias</a>
-            <a href="#coro" id="coro" class="button coro">Coropletas</a>
-            <a href="#zoom" id="zoom" class="button zoom">Zoom</a>
+            <ul> <a href="#Capa1" id="Capa1" class="button Capa1">ICC</a>  </ul>
+            <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Capa2</a>  </ul>
+            <ul> <a href="#Capa3" id="Capa3" class="button Capa3">Jovenes</a>  </ul>
+            <ul> <a href="#Capa4" id="Capa4" class="button Capa4">Voto'16</a>  </ul>
         </div>
-
 
          <!-- Recupera la provincia de la selección-->
 
         <script>
-        /*
-        var search_text = $( "#province_selector" ).change(function() {
-            var Recg_prov = ( search_text .val())
-            alert(Recg_prov);
-        });
-        */
 
+         /* var search_text = (function() {
+            sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} " + geo_filter, {table_name: table_name});
+            var Recg_prov = ( search_text .val());
+            alert(Recg_prov);
+
+
+
+        var kk = $('#province_selector').val();
+        if (kk == "Todas"){
+          Prov = "A Coruña','Lugo','Pontevedra','Ourense'";
+          alert (kk)
+        };
+      };*/
 
         // GLOBALES
 
@@ -204,28 +274,13 @@
 
 
         /* FUNCIONES */
-
         var refresh = function () {
             sublayer.setSQL("select * from " + table_name + geo_filter);
             refreshGraph();
         };
 
-        var update_municipality_selector = function () {
-            $("#municipality_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select ds_muni from {{table_name}}" + geo_filter + " group by ds_muni order by ds_muni", {table_name: table_name})
-            .done(function (data) {
-                municipalities = [];
-                for (var i = 0; i < data.rows.length; i++) {
-                    municipalities.push(data.rows[i].ds_muni);
-                    $("#municipality_selector").append('<option value="' + data.rows[i].ds_muni + '">' + data.rows[i].ds_muni + '</option>');
-                }
-            })
-            .error(function(errors) {
-                console.log("errors:" + errors);
-            });
-        };
-
+        /* No funciona lo programe en otro lado y falta añadir imangen estilo y referencia de libreria*/
         function initAutocomplete() {
             function log(message) {
                 $("<div>").text(message).prependTo("#log");
@@ -253,7 +308,7 @@
             });
         }
 
-        //Each bar represents a single discrete quantity.
+        //Gréfico de barras agupadas
         function parseData(data) {
             console.log('parseData')
             // console.log(data)
@@ -342,29 +397,53 @@
 
             //we define the queries that will be performed when we click on the buttons, by modifying the SQL of our layer
             var LayerActionsA = {
-                provincias: function() {
-                    sublayer.set({
-                        cartocss: "#layer{polygon-fill: #FE2E2E; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;}",
-                        interactivity: ['ds_prov', 'ds_muni']
-                    });
-                    return true;
-                },
+                        Capa1: function() {
+                        sublayer.set({
+                        cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #F5A27A; line-width: 0.5; line-opacity: 0.8;} #layer[ech_16icc <= 25]{polygon-fill: #F5F514;} #layer[ech_16icc <= 10]{polygon-fill: #F5B869} #layer[ech_16icc <= 0]{polygon-fill: #F57A40;} #layer[ech_16icc <= -10]{polygon-fill: #F53D36;}#layer[ech_16icc <= -25]{polygon-fill: #F50024;}",
+                            interactivity: ['ds_prov', 'ds_muni']
+                        });
+                            $('#legend1').show();
+                            $('#legend2').hide();
+                            $('#legend3').hide();
+                            $('#legend4').hide();
+                        return true;
+                        },
 
-                zoom: function() {
-                    map.setView([42.725, -7.889], 8, {
-                        animation: true
-                    });
+                        Capa2: function() {
+                        sublayer.set({
+                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[cd_prov = '15']{polygon-fill: #FFFF00;} #layer[cd_prov = '36']{polygon-fill: #E31A1C;} #layer[cd_prov = '27']{polygon-fill: #FC4E2A;} #layer[cd_prov = '32'] {polygon-fill: #FD8D3C;}",
+                            interactivity: ['ds_prov']
+                        });
+                        $('#legend1').hide();
+                        $('#legend2').show();
+                        $('#legend3').hide();
+                        $('#legend4').hide();
 
-                    return true;
-                },
-                coro: function() {
-                    sublayer.set({
-                        cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #FFF; line-width: 1; line-opacity: 1;} #layer[cd_prov = '15']{polygon-fill: #B10026;} #layer[cd_prov = '36']{polygon-fill: #E31A1C;} #layer[cd_prov = '27']{polygon-fill: #FC4E2A;} #layer[cd_prov = '32'] {polygon-fill: #FD8D3C;}",
-                        interactivity: ['ds_prov']
-                    });
-                    $('#legend').show();
+                        return true;
 
+                                   },
+                        Capa3: function() {
+                        sublayer.set({
+                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
+                            interactivity: ['ds_prov']
+                        });
+                        $('#legend1').hide();
+                        $('#legend2').hide();
+                        $('#legend3').show();
+                        $('#legend4').hide();
 
+                        return true;
+
+                                   },
+                        Capa4: function() {
+                        sublayer.set({
+                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 0.8;} #layer[el16_pmay = 'PP']{polygon-fill: #00C5FF;} #layer[el16_pmay = 'PSOE']{polygon-fill: #FF0000;} #layer[el16_pmay = 'MAREAS']{polygon-fill: #C500FF;} #layer[el16_pmay = 'BNG'] {polygon-fill: #004DA8;}",
+                            interactivity: ['ds_prov']
+                        });
+                        $('#legend1').hide();
+                        $('#legend2').hide();
+                        $('#legend3').hide();
+                        $('#legend4').show();
                     return true;
                 }
             };
@@ -385,9 +464,60 @@
             var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['ds_prov', 'ds_muni', 'ds_comarca', 'ds_concello']);
 
             refreshGraph();
-        }); // Fin de la carga del mapa
+        });
+        // Fin de la carga del mapa
 
 
+          /* Control del municipio */
+        var update_municipality_selector = function () {
+            $("#municipality_selector").html('<option value="Todos">Todos</option>');
+
+            sql.execute("select ds_muni from {{table_name}}" + geo_filter + " group by ds_muni order by ds_muni", {table_name: table_name})
+            .done(function (data) {
+                municipalities = [];
+                for (var i = 0; i < data.rows.length; i++) {
+                    municipalities.push(data.rows[i].ds_muni);
+                    $("#municipality_selector").append('<option value="' + data.rows[i].ds_muni + '">' + data.rows[i].ds_muni + '</option>');
+                }
+            })
+            .error(function(errors) {
+                console.log("errors:" + errors);
+            });
+        };
+
+        /* Control de poblacion */
+        var update_poblacion_selector = function () {
+            $("#poblacion_selector").html('<option value="Todos">Todos</option>');
+
+            sql.execute("select pb_esjoven from {{table_name}}" + geo_filter + " group by pb_esjoven order by pb_esjoven", {table_name: table_name})
+            .done(function (data) {
+                poblacion = [];
+                for (var i = 0; i < data.rows.length; i++) {
+                    poblacion.push(data.rows[i].pb_esjoven);
+                    $("#poblacion_selector").append('<option value="' + data.rows[i].pb_esjoven + '">' + data.rows[i].pb_esjoven + '</option>');
+                }
+            })
+            .error(function(errors) {
+                console.log("errors:" + errors);
+            });
+        };
+
+        /* Control vulnerable */
+         var update_vulnera_selector = function () {
+            $("#vulnera_selector").html('<option value="Todos">Todos</option>');
+
+            sql.execute("select vulne1 from {{table_name}}" + geo_filter + " group by vulne1 order by vulne1", {table_name: table_name})
+            .done(function (data) {
+                vulnera = [];
+                for (var i = 0; i < data.rows.length; i++) {
+                    vulnera.push(data.rows[i].vulne1);
+                    $("#vulnera_selector").append('<option value="' + data.rows[i].vulne1 + '">' + data.rows[i].vulne1 + '</option>');
+                }
+            })
+            .error(function(errors) {
+                console.log("errors:" + errors);
+            });
+        };
         /* CARGA DEL SELECTOR DE PROVINCIAS */
         sql.execute("select ds_prov from {{table_name}} group by ds_prov order by ds_prov", {table_name: table_name})
         .done(function (data) {
@@ -403,18 +533,24 @@
 
         /* CARGA DEL SELECTOR DE MUNICIPIOS */
         update_municipality_selector();
-
+       /* CARGA DEL SELECTOR DE POBLACIÓN */
+        update_poblacion_selector();
+         /* CARGA VULNERABILIDAD */
+        update_vulnera_selector();
 
         /* EVENTOS SELECTORES */
         $('#province_selector').change(function() {
             var province = $(this).val();
-            if (province == "Todas") {
-                geo_filter = "";
+            if (province == "A Coruña','Lugo','Pontevedra','Ourense") {
+                            geo_filter = "";
+
             } else {
                 geo_filter = " where ds_prov = '" + $(this).val() + "'";
+
             }
             refresh();
             update_municipality_selector();
+            update_poblacion_selector();
         });
 
         $('#municipality_selector').change(function() {
@@ -428,9 +564,39 @@
             }
         });
 
+        $('#poblacion_selector').change(function() {
+            var poblacion = $(this).val();
+            if (poblacion == "Todos") {
+                geo_filter = "";
+                refresh();
 
+            } else {
+                geo_filter = " where pb_esjoven = '" + $(this).val() + "' and ds_prov in  ('" +  $('#province_selector').val() + "')";
+                alert(geo_filter);
+                refresh();
+
+
+            }
+          });
+
+            $('#vulnera_selector').change(function() {
+            var vulnera = $(this).val();
+            if (vulnera == "Todos") {
+                geo_filter = "";
+                refresh();
+
+            } else {
+                geo_filter = " where vulne1 = '" + $(this).val() + "' and ds_prov in  ('" +  $('#province_selector').val() + "')";
+                alert(geo_filter);
+                refresh();
+
+
+            }
+          });
     </script>
 
 
     </body>
 </html>
+
+

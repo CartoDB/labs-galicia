@@ -245,7 +245,7 @@
                     <td>
                       <select id='preocupa_selector'>
                         <option value='todas' selected>Todas</option>
-                        <option value='pre_paro'>Paro</option>
+                        <option   value='pre_paro'>Paro</option>
                         <option value = 'pre_sani'>Sanidad</option>
                         <option value = 'pre_edu'>Educación</option>
                         <option value = 'pre_econom'>Economía</option>
@@ -286,6 +286,7 @@
         };
         var sublayer;
         var nvChart;
+        var concern_averages;
 
         /* Carga del mapa */
         var map = L.map('map', {
@@ -325,9 +326,9 @@
         }
 
         var refreshGraph = function(){
-           //sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} where ds_prov ilike '" +  Recg_prov + "'"), {table_name: table_name})
-           sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} " + getGeoFilter(), {table_name: table_name})
-          .done(function(data) {
+            // vertical bar
+            sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} " + getGeoFilter(), {table_name: table_name})
+            .done(function(data) {
                 nv.addGraph(function() {
                     var chart = nv.models.discreteBarChart()
                         .color(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"])
@@ -349,7 +350,13 @@
 
                     return chart;
                 });
-          });
+            });
+
+            // concerns bar
+            sql.execute("select avg(pre_paro) as pre_paro, avg(pre_sani) as pre_sani, avg(pre_edu) as pre_edu, avg(pre_econom) as pre_econom, avg(pre_empleoq) as pre_empleoq, avg(pre_despobl) as pre_despobl, avg(pre_incendio) as pre_incendio from {{table_name}}" + getGeoFilter(), {table_name: table_name})
+            .done(function(data) {
+                //debugger;
+            })
         }
 
         var getGeoFilter = function(){
@@ -411,7 +418,7 @@
             var LayerActionsA = {
                         Capa1: function() {
                         sublayer.set({
-                          sql: "SELECT * FROM test_data",
+                          sql: "SELECT * FROM test_data " + getGeoFilter(),
                         cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #F5A27A; line-width: 0.5; line-opacity: 0.8;} #layer[ech_16icc <= 25]{polygon-fill: #F5F514;} #layer[ech_16icc <= 10]{polygon-fill: #F5B869} #layer[ech_16icc <= 0]{polygon-fill: #F57A40;} #layer[ech_16icc <= -10]{polygon-fill: #F53D36;}#layer[ech_16icc <= -25]{polygon-fill: #F50024;}",
                             interactivity: ['ds_prov', 'ds_muni']
                         });
@@ -424,7 +431,7 @@
 
                         Capa2: function() {
                         sublayer.set({
-                          sql: "SELECT * FROM test_data",
+                          sql: "SELECT * FROM test_data" + getGeoFilter(),
                             cartocss: "#layer { polygon-fill: ramp([ind_tparo], (#ecda9a, #f3ad6a, #f97b57, #ee4d5a), quantiles); line-width: 1; line-color: #FFF; line-opacity: 0.5; }",
                             interactivity: ['ind_tparo']
                         });
@@ -439,7 +446,7 @@
                                    },
                         Capa3: function() {
                         sublayer.set({
-                          sql: "SELECT * FROM test_data",
+                          sql: "SELECT * FROM test_data" + getGeoFilter(),
                             cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color: #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
                             interactivity: ['ds_prov']
                         });
@@ -453,7 +460,7 @@
                                    },
                         Capa4: function() {
                         sublayer.set({
-                          sql: "SELECT * FROM test_data",
+                          sql: "SELECT * FROM test_data" + getGeoFilter(),
                             cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 0.8;} #layer[el16_pmay = 'PP']{polygon-fill: #00C5FF;} #layer[el16_pmay = 'PSOE']{polygon-fill: #FF0000;} #layer[el16_pmay = 'MAREAS']{polygon-fill: #C500FF;} #layer[el16_pmay = 'BNG'] {polygon-fill: #004DA8;}",
                             interactivity: ['ds_prov']
                         });
@@ -480,7 +487,15 @@
                 });
             var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['ds_prov', 'ds_muni', 'ds_comarca', 'ds_concello']);
 
-            refreshGraph();
+            // get average concerns and then load graphs
+
+            sql.execute('select avg(pre_paro) as pre_paro ,avg(pre_sani) as pre_sani ,avg(pre_edu) as pre_edu ,avg(pre_econom) as pre_econom ,avg(pre_empleoq) as pre_empleoq ,avg(pre_despobl) as pre_despobl ,avg(pre_incendio) as pre_incendio from {{table_name}}', {table_name: table_name})
+            .done(function(data){
+                if (data.rows){
+                    concern_averages = data.rows[0]
+                    refreshGraph();
+                };
+            })
         });
         // Fin de la carga del mapa
 

@@ -102,12 +102,21 @@
 
         <!--ESTILO DE LOS GRÁFICOS -->
         <style>
-            #chart {
+            #chart_pob {
                 height: 200px;
                 margin: 5px;
                 width: 300px;
                 position: absolute;
                 top: 10px;
+                right:10px;
+                z-index: 1;
+         }
+            #chart_concern{
+                height: 200px;
+                margin: 5px;
+                width: 300px;
+                position: absolute;
+                top: 310px;
                 right:10px;
                 z-index: 1;
          }
@@ -119,7 +128,8 @@
     </head>
     <body>
 
-        <div id="chart"></div>
+        <div id="chart_pob"></div>
+        <div id="chart_concern"></div>
 
 
         <!-- DIV MAPA -->
@@ -287,6 +297,15 @@
         var sublayer;
         var nvChart;
         var concern_averages;
+        var concern_keys = {
+            'pre_paro':  'Paro',
+            'pre_sani':  'Sanidad',
+            'pre_edu':  'Educación',
+            'pre_econom':  'Economía',
+            'pre_empleoq':  'Empleo',
+            'pre_despobl':  'Despoblación',
+            'pre_incendio':  'Incendios'
+        };
 
         /* Carga del mapa */
         var map = L.map('map', {
@@ -308,7 +327,6 @@
 
         //Gréfico de barras agupadas
         function parseData(data) {
-            console.log('parseData')
             // console.log(data)
             var output = {
                 key:"Main title",
@@ -341,8 +359,8 @@
                         ;
 
 
-                    d3.select('#chart svg').remove();
-                    d3.select('#chart').append('svg')
+                    d3.select('#chart_pob svg').remove();
+                    d3.select('#chart_pob').append('svg')
                         .datum(parseData(data))
                         .call(chart);
 
@@ -355,7 +373,38 @@
             // concerns bar
             sql.execute("select avg(pre_paro) as pre_paro, avg(pre_sani) as pre_sani, avg(pre_edu) as pre_edu, avg(pre_econom) as pre_econom, avg(pre_empleoq) as pre_empleoq, avg(pre_despobl) as pre_despobl, avg(pre_incendio) as pre_incendio from {{table_name}}" + getGeoFilter(), {table_name: table_name})
             .done(function(data) {
-                //debugger;
+                var averages = data.rows[0];
+                var values = _.map(_.keys(data.rows[0]),function(prop){
+                    return {
+                        "label" :  concern_keys[prop],
+                        "value": averages[prop] - concern_averages[prop]
+                    }
+                });
+                var gr_data = [{"key":"Preocupaciones", "color":"red", values:values }];
+
+
+                nv.addGraph(function() {
+                    var chart = nv.models.multiBarHorizontalChart()
+                        .x(function(d) { return d.label })
+                        .y(function(d) { return d.value })
+                        .margin({top: 30, right: 20, bottom: 50, left: 175})
+                        .showValues(true)
+                        .tooltips(true)
+                        .stacked(true)
+                        .showControls(false);
+
+                    chart.yAxis
+                        .tickFormat(d3.format(',.2f'));
+
+                    d3.select('#chart_concern svg').remove();
+                    d3.select('#chart_concern').append('svg')
+                        .datum(gr_data)
+                        .call(chart);
+
+                    nv.utils.windowResize(chart.update);
+
+                    return chart;
+                  });
             })
         }
 
@@ -369,8 +418,6 @@
                     query_sections.push( prop + ' = \'' + value + '\'' );
                 }
             });
-
-            console.log(query_sections);
 
             return query_sections.length > 0 ? ' where 1=1 and ' + query_sections.join(' and ') : '';
         }
@@ -479,12 +526,6 @@
                 LayerActionsA[$(this).attr('id')]();
             });
 
-           console.log(layer.getSubLayer(0));
-
-            layer.getSubLayer(0).on('featureClick',
-                function(e, pos, latlng, data) {
-                    console.log(data);
-                });
             var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['ds_prov', 'ds_muni', 'ds_comarca', 'ds_concello']);
 
             // get average concerns and then load graphs
@@ -610,17 +651,6 @@
                 geo_filter['vulne1'] = false;
             } else {
                 geo_filter['vulne1'] = vulnera;
-            }
-            refresh();
-        });
-        // preocupaciones
-        $('#preocupa_selector').change(function() {
-            var preocupa = $(this).val();
-            if (preocupa == "todas") {
-              geo_filter['concern'] = false;
-            }
-            else {
-              geo_filter['concern'] = preocupa;
             }
             refresh();
         });

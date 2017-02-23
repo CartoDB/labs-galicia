@@ -219,6 +219,24 @@
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td> <p style="color: white">Filtro Preocupación</p></td>
+                </tr>
+                <tr>
+                    <td> <p style="color: white">Preocupación</p></td>
+                    <td>
+                      <select id='preocupa_selector'>
+                        <option value='todas' selected>Todas</option>
+                        <option value='pre_paro'>Paro</option>
+                        <option value = 'pre_sani'>Sanidad</option>
+                        <option value = 'pre_edu'>Educación</option>
+                        <option value = 'pre_econom'>Economía</option>
+                        <option value = 'pre_empleoq'>Empleo</option>
+                        <option value = 'pre_despobl'>Despoblación</option>
+                        <option value = 'pre_incendio'>Incendios</option>
+                      </select>
+                    </td>
+                </tr>
             </table>
         </div>
 
@@ -275,7 +293,7 @@
 
         /* FUNCIONES */
         var refresh = function () {
-            sublayer.setSQL("select * from " + table_name + geo_filter);
+            sublayer.setSQL("select * from " + table_name + " WHERE 1=1 " + geo_filter);
             refreshGraph();
         };
 
@@ -329,7 +347,7 @@
 
         var refreshGraph = function(){
            //sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} where ds_prov ilike '" +  Recg_prov + "'"), {table_name: table_name})
-           sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} " + geo_filter, {table_name: table_name})
+           sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} WHERE 1=1 " + geo_filter, {table_name: table_name})
           .done(function(data) {
                 nv.addGraph(function() {
                     var chart = nv.models.discreteBarChart()
@@ -472,7 +490,7 @@
         var update_municipality_selector = function () {
             $("#municipality_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select ds_muni from {{table_name}}" + geo_filter + " group by ds_muni order by ds_muni", {table_name: table_name})
+            sql.execute("select ds_muni from {{table_name}} WHERE 1=1 " + geo_filter + " group by ds_muni order by ds_muni", {table_name: table_name})
             .done(function (data) {
                 municipalities = [];
                 for (var i = 0; i < data.rows.length; i++) {
@@ -489,7 +507,7 @@
         var update_poblacion_selector = function () {
             $("#poblacion_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select pb_esjoven from {{table_name}}" + geo_filter + " group by pb_esjoven order by pb_esjoven", {table_name: table_name})
+            sql.execute("select pb_esjoven from {{table_name}} WHERE 1 = 1 " + geo_filter + " group by pb_esjoven order by pb_esjoven", {table_name: table_name})
             .done(function (data) {
                 poblacion = [];
                 for (var i = 0; i < data.rows.length; i++) {
@@ -506,7 +524,7 @@
          var update_vulnera_selector = function () {
             $("#vulnera_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select vulne1 from {{table_name}}" + geo_filter + " group by vulne1 order by vulne1", {table_name: table_name})
+            sql.execute("select vulne1 from {{table_name}} WHERE 1 = 1 " + geo_filter + " group by vulne1 order by vulne1", {table_name: table_name})
             .done(function (data) {
                 vulnera = [];
                 for (var i = 0; i < data.rows.length; i++) {
@@ -545,7 +563,7 @@
                             geo_filter = "";
 
             } else {
-                geo_filter = " where ds_prov = '" + $(this).val() + "'";
+                geo_filter = " and ds_prov = '" + $(this).val() + "'";
 
             }
             refresh();
@@ -559,7 +577,7 @@
                 geo_filter = "";
                 refresh();
             } else {
-                geo_filter = " where ds_muni = '" + $(this).val() + "'";
+                geo_filter = " and ds_muni = '" + $(this).val() + "'";
                 refresh();
             }
         });
@@ -571,7 +589,7 @@
                 refresh();
 
             } else {
-                geo_filter = " where pb_esjoven = '" + $(this).val() + "' and ds_prov in  ('" +  $('#province_selector').val() + "')";
+                geo_filter = geo_filter + " and pb_esjoven = '" + $(this).val() + "'";
                 alert(geo_filter);
                 refresh();
 
@@ -586,11 +604,25 @@
                 refresh();
 
             } else {
-                geo_filter = " where vulne1 = '" + $(this).val() + "' and ds_prov in  ('" +  $('#province_selector').val() + "')";
+                geo_filter = geo_filter + " and vulne1 = '" + $(this).val() + "'";
                 alert(geo_filter);
                 refresh();
 
 
+            }
+          });
+          // preocupaciones
+          $('#preocupa_selector').change(function() {
+            var preocupa = $(this).val();
+            if (preocupa == "todas") {
+              geo_filter = "";
+              refresh();
+
+            }
+            else {
+              geo_filter = geo_filter + " and " + $(this).val() + " <> 0";
+              alert(geo_filter);
+              refresh();
             }
           });
     </script>
@@ -598,5 +630,3 @@
 
     </body>
 </html>
-
-

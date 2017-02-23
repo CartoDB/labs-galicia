@@ -33,37 +33,28 @@
         <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 
-        <!--ESTILO DEL MAPA Y SUS HERRAMIENTAS -->
+        <!--BOOTSTRAP-->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!--ESTILO  -->
         <style>
 
             html,
             body,
             #map {
                 height: 100%;
-                width: 92%;
+                width: 100%;
                 padding: 0;
                 margin: 0;
             }
-             /*
-            .ui-autocomplete-loading {
-             background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat;
-            }  */
-
-        </style>
-
-            <!--ESTILO DE LOS BOTONES -->
-         <style>
-           #selector_menu {
-            position: absolute;
-            top: 20px;
-            left: 50px;
-            z-index: 9000;
+            .container-fluid .row > div{
+                height: 100vh;
             }
-
            #menu {
-                position: absolute;
-                top: 240px;
-                right: 275px;
                 width: 80px;
                 height: 10px;
                 background: transparent;
@@ -106,19 +97,11 @@
                 height: 200px;
                 margin: 5px;
                 width: 300px;
-                position: absolute;
-                top: 10px;
-                right:10px;
-                z-index: 1;
          }
             #chart_concern{
                 height: 200px;
                 margin: 5px;
                 width: 300px;
-                position: absolute;
-                top: 310px;
-                right:10px;
-                z-index: 1;
          }
             </style>
 
@@ -128,157 +111,134 @@
     </head>
     <body>
 
-        <div id="chart_pob"></div>
-        <div id="chart_concern"></div>
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <!-- DIV SELECTORES-->
+                <div id="selector_menu" class="form-horizontal">
 
 
-        <!-- DIV MAPA -->
-        <div id="map" class="mapita" style="position: relative; cursor: auto;" tabindex="0"></div>
-
-        <!-- LEYENDA -->
-        <div class='cartodb-legend density' style="display: none;" id="legend1">
-            <div class="legend-title" style="color:#284a59">Ind. Confianza Ciudadano</div>
-            <ul>
-                <li class="min"> Muy Baja </li>
-                <li class="max"> Muy Alta </li>
-
-                <li class="graph leg" style="border-radius: 0; border:none">
-                    <div class="colors">
-                        <div class="quartile" style="background-color:#F50024"></div>
-                        <div class="quartile" style="background-color:#F53D36"></div>
-                        <div class="quartile" style="background-color:#F57A40"></div>
-                        <div class="quartile" style="background-color:#F5B869"></div>
-                        <div class="quartile" style="background-color:#F5F514"></div>
-                     </div>
-                     <div class="colors" style="font-weight:normal; text-align: center">
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-                     </div>
-                </li>
-            </ul>
-        </div>
-
-        <div class='cartodb-legend density' style="display: none;" id="legend2">
-            <div class="legend-title" style="color:#284a59">Ind. Paro</div>
-            <ul>
-                <li class="min"> Muy Bajo </li>
-                <li class="max"> Muy Alto </li>
-
-                <li class="graph leg" style="border-radius: 0; border:none">
-                    <div class="colors">
-                        <div class="quartile" style="background-color:#ecda9a"></div>
-                        <div class="quartile" style="background-color:#f3ad6a"></div>
-                        <div class="quartile" style="background-color:#f97b57"></div>
-                        <div class="quartile" style="background-color:#ee4d5a"></div>
-
-                     </div>
-
-                     <div class="colors" style="font-weight:normal; text-align: center">
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-                        <div class="quartile" style="padding-top: 5px"></div>
-
-                     </div>
-                </li>
-            </ul>
-
-        </div>
-
-        <div class='cartodb-legend category' style="display: none;" id="legend3">
-            <div class="legend-title" style="color:#284a59">Jovenes</div>
-            <ul>
-                <li><div class="bullet" style="background-color:#191970"></div>JOVEN</li>
-                <li><div class="bullet" style="background-color:#ADD8E6"></div>NO JOVEN</li>
-
-            </ul>
-        </div>
-
-        <div class='cartodb-legend category' style="display: none;" id="legend4">
-            <div class="legend-title" style="color:#284a59">Voto Mayoritario '16</div>
-            <ul>
-                <li><div class="bullet" style="background-color:#00C5FF"></div>PP</li>
-                <li><div class="bullet" style="background-color:#FF0000"></div>PSOE</li>
-                <li><div class="bullet" style="background-color:#C500FF"></div>MAREAS</li>
-                <li><div class="bullet" style="background-color:#004DA8"></div>BNG</li>
-            </ul>
-        </div>
-
-        <!-- DIV SELECTORES-->
-        <div id="selector_menu">
-            <table border="0" width="100px"   align="center" cellpadding="2px"  >
-                <tr>
-                    <td colspan="2" style="f"><p style="color: white">Filtro Geográfico</p></td>
-                </tr>
-                <tr>
-                    <td> <p style="color: white">Provincias</p></td>
-                    <td>
-                        <select id="province_selector">
+                    <h3>Filtro geográfico</h3>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Provincias</label>
+                        <div class="col-md-8">
+                        <select id="province_selector" class="form-control">
                             <option value="A Coruña','Lugo','Pontevedra','Ourense">Todas</option>
                         </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><p style="color: white">Municipios</p></td>
-                        <td>
-                        <select id="municipality_selector"> </select>
-                    </td>
-                </tr>
-                  <tr>
-                    <td colspan="2" style="f"><p style="color: white">Filtro Prospección</p></td>
-                </tr>
-                <tr>
-                    <td> <p style="color: white">Población</p></td>
-                    <td>
-                        <select id="poblacion_selector">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Municipios</label>
+                        <div class="col-md-8">
+                        <select id="municipality_selector" class="form-control"> </select>
+                        </div>
+                    </div>
 
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><p style="color: white">Vulnerabilidad</p></td>
-                        <td>
-                        <select id="vulnera_selector">
+                    <h3>Filtro Prospección</h3>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Población</label>
+                        <div class="col-md-8">
+                            <select id="poblacion_selector" class="form-control"> </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Vulnerabilidad</label>
+                        <div class="col-md-8">
+                            <select id="vulnera_selector" class="form-control"> </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="map" class="mapita" style="position: relative; cursor: auto;" tabindex="0"></div>
+            </div>
+            <div class="col-md-3">
+                <!-- GRAFICAS -->
+                <div id="chart_pob"></div>
+                <div id="chart_concern"></div>
 
-                        </select>
-                    </td>
-                </tr>
-                <!--
-                <tr>
-                    <td> <p style="color: white">Filtro Preocupación</p></td>
-                </tr>
-                <tr>
-                    <td> <p style="color: white">Preocupación</p></td>
-                    <td>
-                      <select id='preocupa_selector'>
-                        <option value='todas' selected>Todas</option>
-                        <option   value='pre_paro'>Paro</option>
-                        <option value = 'pre_sani'>Sanidad</option>
-                        <option value = 'pre_edu'>Educación</option>
-                        <option value = 'pre_econom'>Economía</option>
-                        <option value = 'pre_empleoq'>Empleo</option>
-                        <option value = 'pre_despobl'>Despoblación</option>
-                        <option value = 'pre_incendio'>Incendios</option>
-                      </select>
-                    </td>
-                </tr>
-                -->
-            </table>
+               <!-- DIV BOTONES-->
+                <div id="menu">
+                    <ul> <a href="#Capa1" id="Capa1" class="button Capa1">ICC</a>  </ul>
+                    <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Ind Paro</a>  </ul>
+                    <ul> <a href="#Capa3" id="Capa3" class="button Capa3">Jovenes</a>  </ul>
+                    <ul> <a href="#Capa4" id="Capa4" class="button Capa4">Voto'16</a>  </ul>
+                </div>
+
+                <!-- LEYENDA -->
+                <div class='cartodb-legend density' style="display: none;" id="legend1">
+                    <div class="legend-title" style="color:#284a59">Ind. Confianza Ciudadano</div>
+                    <ul>
+                        <li class="min"> Muy Baja </li>
+                        <li class="max"> Muy Alta </li>
+
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+                                <div class="quartile" style="background-color:#F50024"></div>
+                                <div class="quartile" style="background-color:#F53D36"></div>
+                                <div class="quartile" style="background-color:#F57A40"></div>
+                                <div class="quartile" style="background-color:#F5B869"></div>
+                                <div class="quartile" style="background-color:#F5F514"></div>
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class='cartodb-legend density' style="display: none;" id="legend2">
+                    <div class="legend-title" style="color:#284a59">Ind. Paro</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+                                <div class="quartile" style="background-color:#ecda9a"></div>
+                                <div class="quartile" style="background-color:#f3ad6a"></div>
+                                <div class="quartile" style="background-color:#f97b57"></div>
+                                <div class="quartile" style="background-color:#ee4d5a"></div>
+
+                             </div>
+
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+
+                             </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class='cartodb-legend category' style="display: none;" id="legend3">
+                    <div class="legend-title" style="color:#284a59">Jovenes</div>
+                    <ul>
+                        <li><div class="bullet" style="background-color:#191970"></div>JOVEN</li>
+                        <li><div class="bullet" style="background-color:#ADD8E6"></div>NO JOVEN</li>
+
+                    </ul>
+                </div>
+
+                <div class='cartodb-legend category' style="display: none;" id="legend4">
+                    <div class="legend-title" style="color:#284a59">Voto Mayoritario '16</div>
+                    <ul>
+                        <li><div class="bullet" style="background-color:#00C5FF"></div>PP</li>
+                        <li><div class="bullet" style="background-color:#FF0000"></div>PSOE</li>
+                        <li><div class="bullet" style="background-color:#C500FF"></div>MAREAS</li>
+                        <li><div class="bullet" style="background-color:#004DA8"></div>BNG</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-       <!-- DIV BOTONES-->
-       <!-- DIV BOTONES-->
-        <div id="menu">
-            <ul> <a href="#Capa1" id="Capa1" class="button Capa1">ICC</a>  </ul>
-            <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Ind Paro</a>  </ul>
-            <ul> <a href="#Capa3" id="Capa3" class="button Capa3">Jovenes</a>  </ul>
-            <ul> <a href="#Capa4" id="Capa4" class="button Capa4">Voto'16</a>  </ul>
         </div>
-
-         <!-- Recupera la provincia de la selección-->
 
         <script>
 

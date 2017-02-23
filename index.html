@@ -78,11 +78,7 @@
         <div class="container-fluid">
         <div class="row">
             <div class="col-md-2">
-                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                <h1>Smart Cityzens</h1>
                 <h4>Temáticos</h4>
                 <div id="thematic" class="form-group">
                     <div class="row">
@@ -455,6 +451,9 @@
                 if (data.rows){
                     concern_averages = data.rows[0]
                     refreshGraph();
+
+                    // Click on the first layer
+                    $('#Capa1').click();
                 };
             })
         });

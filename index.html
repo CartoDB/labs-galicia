@@ -151,14 +151,31 @@
             </ul>
         </div>
 
-        <div class='cartodb-legend category' style="display: none;" id="legend2">
-            <div class="legend-title" style="color:#284a59">Capa2</div>
+        <div class='cartodb-legend density' style="display: none;" id="legend2">
+            <div class="legend-title" style="color:#284a59">Ind. Paro</div>
             <ul>
-                <li><div class="bullet" style="background-color:#FFFF00">
-                <li><div class="bullet" style="background-color:#C84023">
-                <li><div class="bullet" style="background-color:#C97130">
-                <li><div class="bullet" style="background-color:#B41618">
+                <li class="min"> Muy Bajo </li>
+                <li class="max"> Muy Alto </li>
+
+                <li class="graph leg" style="border-radius: 0; border:none">
+                    <div class="colors">
+                        <div class="quartile" style="background-color:#ecda9a"></div>
+                        <div class="quartile" style="background-color:#f3ad6a"></div>
+                        <div class="quartile" style="background-color:#f97b57"></div>
+                        <div class="quartile" style="background-color:#ee4d5a"></div>
+
+                     </div>
+
+                     <div class="colors" style="font-weight:normal; text-align: center">
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+                        <div class="quartile" style="padding-top: 5px"></div>
+
+                     </div>
+                </li>
             </ul>
+
         </div>
 
         <div class='cartodb-legend category' style="display: none;" id="legend3">
@@ -246,7 +263,7 @@
        <!-- DIV BOTONES-->
         <div id="menu">
             <ul> <a href="#Capa1" id="Capa1" class="button Capa1">ICC</a>  </ul>
-            <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Capa2</a>  </ul>
+            <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Ind Paro</a>  </ul>
             <ul> <a href="#Capa3" id="Capa3" class="button Capa3">Jovenes</a>  </ul>
             <ul> <a href="#Capa4" id="Capa4" class="button Capa4">Voto'16</a>  </ul>
         </div>
@@ -394,6 +411,7 @@
             var LayerActionsA = {
                         Capa1: function() {
                         sublayer.set({
+                          sql: "SELECT * FROM test_data",
                         cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #F5A27A; line-width: 0.5; line-opacity: 0.8;} #layer[ech_16icc <= 25]{polygon-fill: #F5F514;} #layer[ech_16icc <= 10]{polygon-fill: #F5B869} #layer[ech_16icc <= 0]{polygon-fill: #F57A40;} #layer[ech_16icc <= -10]{polygon-fill: #F53D36;}#layer[ech_16icc <= -25]{polygon-fill: #F50024;}",
                             interactivity: ['ds_prov', 'ds_muni']
                         });
@@ -406,9 +424,11 @@
 
                         Capa2: function() {
                         sublayer.set({
-                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[cd_prov = '15']{polygon-fill: #FFFF00;} #layer[cd_prov = '36']{polygon-fill: #E31A1C;} #layer[cd_prov = '27']{polygon-fill: #FC4E2A;} #layer[cd_prov = '32'] {polygon-fill: #FD8D3C;}",
-                            interactivity: ['ds_prov']
+                          sql: "SELECT * FROM test_data",
+                            cartocss: "#layer { polygon-fill: ramp([ind_tparo], (#ecda9a, #f3ad6a, #f97b57, #ee4d5a), quantiles); line-width: 1; line-color: #FFF; line-opacity: 0.5; }",
+                            interactivity: ['ind_tparo']
                         });
+
                         $('#legend1').hide();
                         $('#legend2').show();
                         $('#legend3').hide();
@@ -419,7 +439,8 @@
                                    },
                         Capa3: function() {
                         sublayer.set({
-                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
+                          sql: "SELECT * FROM test_data",
+                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color: #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
                             interactivity: ['ds_prov']
                         });
                         $('#legend1').hide();
@@ -432,6 +453,7 @@
                                    },
                         Capa4: function() {
                         sublayer.set({
+                          sql: "SELECT * FROM test_data",
                             cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 0.8;} #layer[el16_pmay = 'PP']{polygon-fill: #00C5FF;} #layer[el16_pmay = 'PSOE']{polygon-fill: #FF0000;} #layer[el16_pmay = 'MAREAS']{polygon-fill: #C500FF;} #layer[el16_pmay = 'BNG'] {polygon-fill: #004DA8;}",
                             interactivity: ['ds_prov']
                         });

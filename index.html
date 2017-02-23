@@ -243,7 +243,7 @@
        <!-- DIV BOTONES-->
         <div id="menu">
             <ul> <a href="#Capa1" id="Capa1" class="button Capa1">ICC</a>  </ul>
-            <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Capa2</a>  </ul>
+            <ul> <a href="#Capa2" id="Capa2" class="button Capa2">Ind Paro</a>  </ul>
             <ul> <a href="#Capa3" id="Capa3" class="button Capa3">Jovenes</a>  </ul>
             <ul> <a href="#Capa4" id="Capa4" class="button Capa4">Voto'16</a>  </ul>
         </div>
@@ -445,7 +445,7 @@
                         Capa3: function() {
                         sublayer.set({
                           sql: "SELECT * FROM test_data",
-                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
+                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color: #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
                             interactivity: ['ds_prov']
                         });
                         $('#legend1').hide();

@@ -589,6 +589,13 @@
                 refresh();
 
             } else {
+              if ($(this).val() == 'NO JOVEN'){
+                  geo_filter = geo_filter.replace("and pb_esjoven = 'JOVEN'",'')
+              }
+              else if ($(this).val() == 'JOVEN') {
+                  geo_filter = geo_filter.replace("and pb_esjoven = 'NO JOVEN'",'')
+              }
+
                 geo_filter = geo_filter + " and pb_esjoven = '" + $(this).val() + "'";
                 alert(geo_filter);
                 refresh();
@@ -604,11 +611,15 @@
                 refresh();
 
             } else {
+              if ($(this).val() == 'NO VULNERABLE'){
+                geo_filter = geo_filter.replace("and vulne1 = 'VULNERABLE'",'')
+              } else if ($(this).val() == 'VULNERABLE'){
+                geo_filter = geo_filter.replace("and vulne1 = 'NO VULNERABLE'",'')
+              }
+              console.log(geo_filter)
                 geo_filter = geo_filter + " and vulne1 = '" + $(this).val() + "'";
                 alert(geo_filter);
                 refresh();
-
-
             }
           });
           // preocupaciones
@@ -620,6 +631,7 @@
 
             }
             else {
+
               geo_filter = geo_filter + " and " + $(this).val() + " <> 0";
               alert(geo_filter);
               refresh();

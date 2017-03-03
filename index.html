@@ -43,17 +43,22 @@
             }
             .container-fluid .row > div{
                 height: 100vh;
+				background-color:#151515;
             }
             #chart_pob {
-                height: 300px;
-                width: 100%;
+                height: 200px;
+                width: 30%;
             }
             #chart_concern{
-                height: 400px;
+                height: 270px;
+                width: 100%;
+            }
+			#chart_tipo{
+                height: 270px;
                 width: 100%;
             }
             #thematic button{
-                border: 1px solid #2b3e50;
+                border: 1px solid #151515;
             }
             #thematic .row {
                 margin: 0 5px;
@@ -66,31 +71,153 @@
            .nvd3 .nv-y text,
            .nvd3 .nv-legend text{
                 fill: white;
-            }
-        </style>
+			}}
+  }
 
-        <!-- Buscar auto completar -->
-        <script>
-        </script>
+      }
+
+      .cartodb-popup-content .content h4{
+          font-style: italic;
+		  color:red;
+		  text-align: left;
+          font-size: 16px;
+      }
+      .cartodb-popup-content .content p{
+          text-align: left;
+          font-size: 16px;
+          color:red;
+          margin-left: 20px;
+      }
+
+      /* set styles to the custom infowindow -> close button */
+      .cartodb-popup-close-button {
+        position: absolute;
+        top: -12px;
+        right: -11px;
+        width: 26px;
+        height: 26px;
+        background: url('http://libs.cartodb.com/cartodb.js/v3/themes/img/light.png') no-repeat 0 -23px;
+        text-indent: -9999px;
+        font-size: 0;
+        line-height: 0;
+        opacity: 1;
+        text-transform: uppercase;
+        z-index: 3;
+      }
+      /* set styles to the custom infowindow -> tip container */
+      .cartodb-popup-tip-container{
+        position: absolute;
+        bottom: -13px;
+        left: 23px;
+         width: 16px;
+         height: 14px;
+         background: url('http://libs.cartodb.com/cartodb.js/v3/themes/img/light.png') no-repeat -23px -7px;
+         text-indent: -9999px;
+         font-size: 0;
+         line-height: 0;
+         opacity: 1;
+         z-index: 3;
+      }
+      /* change legend's position and style */
+      .cartodb-legend{
+         left: 20px;
+         bottom: 50px!important;
+         width: 250px;
+         height: auto;
+         background-color: #ffffff;
+         opacity: 1;
+         border-radius: 25px!important;
+       }
+       .cartodb-legend ul li{
+        margin-left: 5px!important;
+        font-style: italic!important;
+        font-size: 10px!important;
+       }
+
+
+
+         div.cartodb-timeslider {
+        left:10px!important;
+        right:10px!important;
+        bottom: 10px!important;
+        height:50px;
+        width: 50%;
+        background-color: #000;
+      }
+
+      li.controls,
+      li.time {
+        position:absolute;
+        top:-5px;
+        border:2!important;
+        z-index:10;
+        left: 35%;
+
+      }
+
+      li.controls {
+        left:5%;
+        margin-left:-50px;
+
+      }
+
+      div.cartodb-timeslider li.last {
+        position:absolute;
+        left:15px;
+        right:15px;
+        z-index:2;
+
+      }
+
+      div.cartodb-timeslider .slider {
+        width: 100%;
+        background-color: red;
+      }
+
+      div.cartodb-timeslider .slider-wrapper {
+        position:absolute;
+        left:0;
+        right:0;
+        width:100%;
+        padding:30px 0 15px;
+        background-color: #000;
+
+      }
+    </style>
+
     </head>
     <body>
-
+<!-- <img src="scripts/minsait.png>-->
         <div class="container-fluid">
         <div class="row">
             <div class="col-md-2">
-                <h1>Smart Cityzens</h1>
+			    <h2>Mapa Social de Galicia</h2>
                 <h4>Temáticos</h4>
                 <div id="thematic" class="form-group">
                     <div class="row">
-                        <button type="button" id="Capa1" class="col-md-6 btn btn-default">ICC</button>
-                        <button type="button" id="Capa2" class="col-md-6 btn btn-default">Paro</button>
+                        <button type="button" id="Capa1" class="col-md-6 btn btn-default">Confianza</button>
+                        <button type="button" id="Capa2" class="col-md-6 btn btn-default">Tasa Paro</button>
                     </div>
                     <div class="row">
-                        <button type="button" id="Capa3" class="col-md-6 btn btn-default">Jóvenes</button>
-                        <button type="button" id="Capa4" class="col-md-6 btn btn-default">Voto'16</button>
+                        <button type="button" id="Capa3" class="col-md-6 btn btn-default">T.Población</button>
+                        <button type="button" id="Capa4" class="col-md-6 btn btn-default">Mayoría '16</button>
                     </div>
                 </div>
-
+                <h4>Preocupaciones CIS</h4>
+                <div id="thematic" class="form-group">
+                    <div class="row">
+                        <button type="button" id="Capa5" class="col-md-6 btn btn-default">Paro</button>
+                        <button type="button" id="Capa6" class="col-md-6 btn btn-default">Sanidad</button>
+                    </div>
+                    <div class="row">
+                        <button type="button" id="Capa7" class="col-md-6 btn btn-default">Educación</button>
+                        <button type="button" id="Capa8" class="col-md-6 btn btn-default">Economía</button>
+                    </div>
+					 <div class="row">
+                        <button type="button" id="Capa9" class="col-md-6 btn btn-default">Empleo</button>
+                        <button type="button" id="Capa10" class="col-md-6 btn btn-default">Despoblación</button>
+                    </div>
+                </div>
                 <!-- DIV SELECTORES-->
                 <div id="selector_menu" class="form-horizontal">
                     <h4>Filtro geográfico</h4>
@@ -125,7 +252,7 @@
 
 
                 <!-- LEYENDA -->
-                <div class='cartodb-legend density' style="display: none;" id="legend1">
+                <div class='cartodb-legend density' style="display: none" id="legend1">
                     <div class="legend-title" style="color:#284a59">Ind. Confianza Ciudadano</div>
                     <ul>
                         <li class="min"> Muy Baja </li>
@@ -150,41 +277,191 @@
                     </ul>
                 </div>
 
-                <div class='cartodb-legend density' style="display: none;" id="legend2">
+                <div class='cartodb-legend density' style="display: none" id="legend2">
                     <div class="legend-title" style="color:#284a59">Ind. Paro</div>
                     <ul>
                         <li class="min"> Muy Bajo </li>
                         <li class="max"> Muy Alto </li>
                         <li class="graph leg" style="border-radius: 0; border:none">
                             <div class="colors">
-                                <div class="quartile" style="background-color:#ecda9a"></div>
-                                <div class="quartile" style="background-color:#f3ad6a"></div>
-                                <div class="quartile" style="background-color:#f97b57"></div>
-                                <div class="quartile" style="background-color:#ee4d5a"></div>
+    							<div class="quartile" style="background-color:#d3f2a3"></div>
+    							<div class="quartile" style="background-color:#97e196"></div>
+    							<div class="quartile" style="background-color:#39ab7e"></div>
+    							<div class="quartile" style="background-color:#0d8f81"></div>
+                                <div class="quartile" style="background-color:#245668"></div>
+
                              </div>
                              <div class="colors" style="font-weight:normal; text-align: center">
                                 <div class="quartile" style="padding-top: 5px"></div>
                                 <div class="quartile" style="padding-top: 5px"></div>
                                 <div class="quartile" style="padding-top: 5px"></div>
                                 <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
                              </div>
                         </li>
                     </ul>
                 </div>
-                <div class='cartodb-legend category' style="display: none;" id="legend3">
-                    <div class="legend-title" style="color:#284a59">Jovenes</div>
+                <div class='cartodb-legend category' style="display: none" id="legend3">
+                    <div class="legend-title" style="color:#284a59">Tipo Población</div>
                     <ul>
-                        <li><div class="bullet" style="background-color:#191970"></div>JOVEN</li>
-                        <li><div class="bullet" style="background-color:#ADD8E6"></div>NO JOVEN</li>
+                        <li><div class="bullet" style="background-color:#573b88"></div>Ancianos</li>
+                        <li><div class="bullet" style="background-color:#63589f"></div>Adultos</li>
+						<li><div class="bullet" style="background-color:#b998dd"></div>Jóvenes</li>
+                        <li><div class="bullet" style="background-color:#e4c7f1"></div>Muy Jóvenes</li>
                     </ul>
                 </div>
-                <div class='cartodb-legend category' style="display: none;" id="legend4">
+                <div class='cartodb-legend category' style="display: none" id="legend4">
                     <div class="legend-title" style="color:#284a59">Voto Mayoritario '16</div>
                     <ul>
-                        <li><div class="bullet" style="background-color:#00C5FF"></div>PP</li>
+                        <li><div class="bullet" style="background-color:#1d91c0"></div>PP</li>
                         <li><div class="bullet" style="background-color:#FF0000"></div>PSOE</li>
                         <li><div class="bullet" style="background-color:#C500FF"></div>MAREAS</li>
                         <li><div class="bullet" style="background-color:#004DA8"></div>BNG</li>
+                    </ul>
+                </div>
+				  <div class='cartodb-legend density' style="display: none" id="legend5">
+                    <div class="legend-title" style="color:#284a59">Preocupación Paro %</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+    							<div class="quartile" style="background-color:#c6dbef"></div>
+    							<div class="quartile" style="background-color:#9ecae1"></div>
+    							<div class="quartile" style="background-color:#6baed6"></div>
+    							<div class="quartile" style="background-color:#4292c6"></div>
+                                <div class="quartile" style="background-color:#084594"></div>
+
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
+                    </ul>
+                </div>
+				  <div class='cartodb-legend density' style="display: none" id="legend6">
+                    <div class="legend-title" style="color:#284a59">Preocupación Sanidad %</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+    						<div class="quartile" style="background-color:#fee391"></div>
+    						<div class="quartile" style="background-color:#fec44f"></div>
+    						<div class="quartile" style="background-color:#fe9929"></div>
+    						<div class="quartile" style="background-color:#fc8d59"></div>
+                            <div class="quartile" style="background-color:#ff7f00;"></div>
+
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
+                    </ul>
+                </div>
+				  <div class='cartodb-legend density' style="display: none" id="legend7">
+                    <div class="legend-title" style="color:#284a59">Preocupación Educación %</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+    							<div class="quartile" style="background-color:#d9f0a3"></div>
+    							<div class="quartile" style="background-color:#addd8e"></div>
+    							<div class="quartile" style="background-color:#78c679"></div>
+    							<div class="quartile" style="background-color:#41ab5d;"></div>
+                                <div class="quartile" style="background-color:#005a32"></div>
+
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
+                    </ul>
+                </div>
+				  <div class='cartodb-legend density' style="display: none" id="legend8">
+                    <div class="legend-title" style="color:#284a59">Preocupación Economía %</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+    							<div class="quartile" style="background-color:#ffdd9a"></div>
+    							<div class="quartile" style="background-color:#F5B869"></div>
+    							<div class="quartile" style="background-color:#F57A40"></div>
+    							<div class="quartile" style="background-color:#F53D36"></div>
+                                <div class="quartile" style="background-color:#F50024"></div>
+
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
+                    </ul>
+                </div>
+				  <div class='cartodb-legend density' style="display: none" id="legend9">
+                    <div class="legend-title" style="color:#284a59">Preocupación Empleo %</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+    							<div class="quartile" style="background-color:#9ebcda"></div>
+    							<div class="quartile" style="background-color:#8c96c6"></div>
+    							<div class="quartile" style="background-color:#8c6bb1"></div>
+    							<div class="quartile" style="background-color:#88419d"></div>
+                                <div class="quartile" style="background-color:#6e016b"></div>
+
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
+                    </ul>
+                </div>
+				  <div class='cartodb-legend density' style="display: none" id="legend10">
+                    <div class="legend-title" style="color:#284a59">Preocupación Despoblación</div>
+                    <ul>
+                        <li class="min"> Muy Bajo </li>
+                        <li class="max"> Muy Alto </li>
+                        <li class="graph leg" style="border-radius: 0; border:none">
+                            <div class="colors">
+    						<div class="quartile" style="background-color:#fee391"></div>
+    						<div class="quartile" style="background-color:#fec44f"></div>
+    						<div class="quartile" style="background-color:#fe9929"></div>
+    						<div class="quartile" style="background-color:#cc4c02"></div>
+                            <div class="quartile" style="background-color:#8c2d04"></div>
+
+
+                             </div>
+                             <div class="colors" style="font-weight:normal; text-align: center">
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+                                <div class="quartile" style="padding-top: 5px"></div>
+								<div class="quartile" style="padding-top: 5px"></div>
+                             </div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -194,16 +471,23 @@
             <div id="charts" class="col-md-3">
                 <!-- GRAFICAS -->
                 <div class="row">
-                    <h4>Población</h4>
+                    <h4>Tasa de Paro Juvenil %</h4>
                 </div>
                 <div class="row">
-                    <div id="chart_pob" class="col-md-12"></div>
+                    <div id="chart_pob" class="col-md-3"></div>
                 </div>
                 <div class="row">
-                    <h4>Preocupaciones</h4>
+                    <h4>Preocupaciones:</h4>
+					<h4>Diferencia Porcentual con Galicia</h4>
                 </div>
                 <div class="row">
-                    <div id="chart_concern" class="col-md-12"></div>
+                    <div id="chart_concern" class="col-md-3"></div>
+                </div>
+				<div class="row">
+                    <h4>Tipologias de Famila %</h4>
+                </div>
+                <div class="row">
+                    <div id="chart_tipo" class="col-md-3"></div>
                 </div>
             </div>
         </div>
@@ -214,38 +498,49 @@
         // GLOBALES
 
         var sql = new cartodb.SQL({ user: 'minsait' });
-        var table_name = "test_data";
+        var table_name = "test_data_2";
         var provinces = [];
         var municipalities = [];
         var geo_filter = {
-            ds_prov: false,
-            ds_muni: false,
-            pb_esjoven: false,
-            vulne1: false
+            provincia: false,
+            municipio: false,
+            t_pob_joven: false,
+            ind_vulnerabilidad: false
         };
-        var sublayer;
+   		var sublayer;
         var nvChart;
         var concern_averages;
         var concern_keys = {
-            'pre_paro':  'Paro',
-            'pre_sani':  'Sanidad',
-            'pre_edu':  'Educación',
-            'pre_econom':  'Economía',
-            'pre_empleoq':  'Empleo',
-            'pre_despobl':  'Despoblación',
-            'pre_incendio':  'Incendios'
+            'p_paro':  'Paro',
+            'p_sanidad':  'Sanidad',
+            'p_educacion':  'Educación',
+            'p_economia':  'Economía',
+            'p_empleo':  'Empleo',
+            'p_despoblacion':  'Despoblación',
+            'p_incendio':  'Incendios'
+			};
+		var tipo_averages;
+        var tipo_keys = {
+            'hb_tc':  'A.Niños',
+            'hb_ta':  'A.Adolescentes',
+            'hb_tb':  'A.Jovenes',
+            'hb_tdl': 'A.Pensionistas',
+            'hb_th':  'B.niños',
+            'hb_tf':  'B.Adolescentes',
+            'hb_tgo': 'B.Jovenes',
+			'hb_tkpq':'B.Pensionistas',
         };
 
         /* Carga del mapa */
         var map = L.map('map', {
             zoomControl: true,
-            center: [42.725, -7.889],
-            zoom: 8,
+            center: [42.815, -7.889],
+            zoom:  8,
             minZoom: 8
         });
 
-        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png', {
-            attribution: 'CARTO'
+        L.tileLayer('https://maps.nlp.nokia.com/maptiler/v2/maptile/newest/normal.day.grey/{z}/{x}/{y}/256/png8?lg=eng&token=61YWYROufLu_f8ylE0vn0Q&app_id=qIWDkliFCtLntLma2e6O', {
+            attribution: 'minsait'
         }).addTo(map);
 
         /* FUNCIONES */
@@ -264,8 +559,8 @@
 
             data.rows.forEach(function(item){
                 output.values.push({
-                    label: item.ds_prov,
-                    value: item.pb_pob15
+                    label: item.provincia,
+                    value: item.tparo
                 })
             });
             //We need to wrap output as an array!
@@ -274,18 +569,17 @@
 
         var refreshGraph = function(){
             // vertical bar
-            sql.execute("select distinct ds_prov, pb_pob15 from {{table_name}} " + getGeoFilter(), {table_name: table_name})
+            sql.execute("select avg(ind_paro_juvenil) tparo  from {{table_name}}" + getGeoFilter(), {table_name: table_name})
             .done(function(data) {
                 nv.addGraph(function() {
                     var chart = nv.models.discreteBarChart()
-                        .color(["#a50026","#d73027","#f46d43","#fdae61","#fee08b","#d9ef8b","#a6d96a","#66bd63","#1a9850","#006837"])
+                        .color(["#0431B4"])
                         .x(function(d) { return d.label })    //Specify the data accessors.
                         .y(function(d) { return d.value })
-                        .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
+                        .staggerLabels(false)    //Too many bars and not enough room? Try staggering labels.
                         .tooltips(false)        //Don't show tooltips
-                        .showValues(false)       //...instead, show the bar value right on top of each bar.
-                        .showXAxis(true)
-                        ;
+                        .showValues(true)       //...instead, show the bar value right on top of each bar.
+                        .showXAxis(true);
 
 
                     d3.select('#chart_pob svg').remove();
@@ -300,7 +594,7 @@
             });
 
             // concerns bar
-            sql.execute("select avg(pre_paro) as pre_paro, avg(pre_sani) as pre_sani, avg(pre_edu) as pre_edu, avg(pre_econom) as pre_econom, avg(pre_empleoq) as pre_empleoq, avg(pre_despobl) as pre_despobl, avg(pre_incendio) as pre_incendio from {{table_name}}" + getGeoFilter(), {table_name: table_name})
+            sql.execute("select avg(p_paro) as p_paro, avg(p_sanidad) as p_sanidad, avg(p_educacion) as p_educacion, avg(p_economia) as p_economia, avg(p_empleo) as p_empleo, avg(p_despoblacion) as p_despoblacion, avg(p_incendio) as p_incendio from {{table_name}}" + getGeoFilter(), {table_name: table_name})
             .done(function(data) {
                 var averages = data.rows[0];
                 var values = _.map(_.keys(data.rows[0]),function(prop){
@@ -309,24 +603,64 @@
                         "value": averages[prop] - concern_averages[prop]
                     }
                 });
-                var gr_data = [{"key":"Preocupaciones", "color": "#d67777", values:values }];
+                var gr_data = [{"key":"Preocupaciones", "color": "#0431B4", values:values }];
 
 
                 nv.addGraph(function() {
                     var chart = nv.models.multiBarHorizontalChart()
+					    .barColor(d3.scale.category10().range())
                         .x(function(d) { return d.label })
                         .y(function(d) { return d.value })
                         .margin({top: 20, right: 20, bottom: 20, left: 80})
                         .showValues(true)
-                        .tooltips(true)
-                        .stacked(true)
+                        .tooltips(false)
+                        .stacked(false)
                         .showControls(false);
+
 
                     chart.yAxis
                         .tickFormat(d3.format(',.2f'));
 
                     d3.select('#chart_concern svg').remove();
                     d3.select('#chart_concern').append('svg')
+                        .datum(gr_data)
+                        .call(chart);
+
+                    nv.utils.windowResize(chart.update);
+
+                    return chart;
+                  });
+				   });
+		// Gráfica de Tipología de Familias
+            sql.execute("select avg(hb_tc) as hb_tc, avg(hb_ta) as hb_ta, avg(hb_tb) as hb_tb, avg(hb_tdl) as hb_tdl, avg(hb_th) as hb_th, avg(hb_tf) as hb_tf, avg(hb_tgo) as hb_tgo, avg(hb_tkpq) as hb_tkpq from {{table_name}}" + getGeoFilter(), {table_name: table_name})
+            .done(function(data) {
+                var tipo = data.rows[0];
+                var values = _.map(_.keys(data.rows[0]),function(prop){
+                    return {
+                        "label" :  tipo_keys[prop],
+                        "value": tipo[prop]
+                    }
+                });
+                var gr_data = [{"key":"", "color": "#80FF00", values:values }];
+
+
+                nv.addGraph(function() {
+                    var chart = nv.models.multiBarHorizontalChart()
+					    .barColor(d3.scale.category10().range())
+                        .x(function(d) { return d.label })
+                        .y(function(d) { return d.value })
+                        .margin({top: 20, right: 20, bottom: 20, left: 80})
+                        .showValues(true)
+                        .tooltips(false)
+                        .stacked(false)
+                        .showControls(false);
+
+
+                    chart.yAxis
+                        .tickFormat(d3.format(',.2f'));
+
+                    d3.select('#chart_tipo svg').remove();
+                    d3.select('#chart_tipo').append('svg')
                         .datum(gr_data)
                         .call(chart);
 
@@ -351,125 +685,310 @@
             return query_sections.length > 0 ? ' where 1=1 and ' + query_sections.join(' and ') : '';
         }
 
-
-
         /* Carga de la capa de CARTO */
-        cartodb.createLayer(map, {
+        mapnik_config = {
             user_name: 'minsait',
             type: 'cartodb',
-
             sublayers: [{
-                sql: 'select * from galicia',
-                cartocss: '#layer { polygon-fill: #F00; polygon-opacity: 0.3; line-color: #F00; }',
+                sql: 'select * from test_data_2',
+                cartocss: '#layer { polygon-fill: #F00; polygon-opacity: 0.3; line-color: #F00; }'
             }]
-        },{https:true})
-        .addTo(map)
-        .done(function(layer) {
-            layer.setInteraction(true);
+        }
+        mapnik_promise = cartodb.createLayer(map,mapnik_config,{https:true})
 
-            sublayer = layer.getSubLayer(0);
+        // cartocss style
+     var CARTOCSSTorque = [
+       'Map {',
+       '-torque-time-attribute: "hoja1_date";',
+       '-torque-aggregation-function: "count(cartodb_id)";',
+       '-torque-frame-count: 256;',
+       '-torque-animation-duration: 70;',
+       '-torque-resolution: 2',
+       '-torque-data-aggregation:linear;',
+       '}',
+       '#hoja1_date{',
+       '  marker-width: 8;',
+       '  marker-fill-opacity: 1;',
+       '  marker-fill: #00FF00; ',
+       '  comp-op: "lighten";',
+  /* '  [value > 2] { marker-fill: #FEC44F; }',
+       '  [value > 3] { marker-fill: #FE9929; }',
+       '  [value > 4] { marker-fill: #EC7014; }',
+       '  [value > 5] { marker-fill: #CC4C02; }',
+       '  [value > 6] { marker-fill: #993404; }',
+       '  [value > 7] { marker-fill: #662506; }'*/
+       '  [frame-offset = 1] { marker-width: 10; marker-fill-opacity: 0.05;}',
+       '  [frame-offset = 2] { marker-width: 15; marker-fill-opacity: 0.02;}',
+       '}'
+     ].join('\n');
 
-            //BUSCAR
-            var search_overlay = cdb.vis.Overlay.create('search', map.viz, {});
-            search_overlay.show();
-            $('#map').append(search_overlay.render().el);
+     // initialize a torque layer that uses the CartoDB account details and SQL API to pull in data
+     var torque_config = {
+       type: 'torque',
+       options: {
+         query: "SELECT * FROM twit",
+         user_name: 'minsait',
+         cartocss:  CARTOCSSTorque,
+         loop: false // stop loop of the animation
+       }
+     }
 
-            //BOTONES DE SELECCIÓN DE CAPAS
-            // xxx
+     torque_promise = cartodb.createLayer(map, torque_config, {https:true})
 
-            //we define the queries that will be performed when we click on the buttons, by modifying the SQL of our layer
-            var LayerActionsA = {
-                        Capa1: function() {
-                        sublayer.set({
-                          sql: "SELECT * FROM test_data " + getGeoFilter(),
-                        cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.8; line-color: #F5A27A; line-width: 0.5; line-opacity: 0.8;} #layer[ech_16icc <= 25]{polygon-fill: #F5F514;} #layer[ech_16icc <= 10]{polygon-fill: #F5B869} #layer[ech_16icc <= 0]{polygon-fill: #F57A40;} #layer[ech_16icc <= -10]{polygon-fill: #F53D36;}#layer[ech_16icc <= -25]{polygon-fill: #F50024;}",
-                            interactivity: ['ds_prov', 'ds_muni']
-                        });
-                            $('#legend1').show();
-                            $('#legend2').hide();
-                            $('#legend3').hide();
-                            $('#legend4').hide();
-                        return true;
-                        },
 
-                        Capa2: function() {
-                        sublayer.set({
-                          sql: "SELECT * FROM test_data" + getGeoFilter(),
-                            cartocss: "#layer { polygon-fill: ramp([ind_tparo], (#ecda9a, #f3ad6a, #f97b57, #ee4d5a), quantiles); line-width: 1; line-color: #FFF; line-opacity: 0.5; }",
-                            interactivity: ['ind_tparo']
-                        });
+       // use jQuery promises support to wait for both layers to load async
+      $.when(mapnik_promise, torque_promise)
+       .done(function(mapnik_layer,torque_layer){
+          mapnik_layer.addTo(map,2).addTo(map)
+          .done(function(layer) {
+              layer.setInteraction(true);
 
-                        $('#legend1').hide();
-                        $('#legend2').show();
-                        $('#legend3').hide();
-                        $('#legend4').hide();
+              sublayer = layer.getSubLayer(0);
 
-                        return true;
+              //BUSCAR
+              var search_overlay = cdb.vis.Overlay.create('search', map.viz, {});
+              search_overlay.show();
+              $('#map').append(search_overlay.render().el);
 
-                                   },
-                        Capa3: function() {
-                        sublayer.set({
-                          sql: "SELECT * FROM test_data" + getGeoFilter(),
-                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color: #D3D3D3; line-width: 0.5; line-opacity: 1;} #layer[pb_esjoven = 'JOVEN']{polygon-fill:#191970} #layer[pb_esjoven = 'NO JOVEN']{polygon-fill:#ADD8E6;}",
-                            interactivity: ['ds_prov']
-                        });
-                        $('#legend1').hide();
-                        $('#legend2').hide();
-                        $('#legend3').show();
-                        $('#legend4').hide();
+              //BOTONES DE SELECCIÓN DE CAPAS
+              // xxx
 
-                        return true;
+              //we define the queries that will be performed when we click on the buttons, by modifying the SQL of our layer
+              var LayerActionsA = {
+                          Capa1: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.7; line-color: #F5A27A; line-width: 0.5; line-opacity: 0.8;} #layer[ind_confianza <= 25]{polygon-fill: #F5F514;} #layer[ind_confianza <= 10]{polygon-fill: #F5B869} #layer[ind_confianza <= 0]{polygon-fill: #F57A40;} #layer[ind_confianza <= -10]{polygon-fill: #F53D36;}#layer[ind_confianza <= -25]{polygon-fill: #F50024;}",
+                            interactivity: ['seccion','provincia','municipio','mayoria_16','t_pob_joven','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').show();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+              						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
+                          return true;
+                          },
 
-                                   },
-                        Capa4: function() {
-                        sublayer.set({
-                          sql: "SELECT * FROM test_data" + getGeoFilter(),
-                            cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.5; line-color:     #D3D3D3; line-width: 0.5; line-opacity: 0.8;} #layer[el16_pmay = 'PP']{polygon-fill: #00C5FF;} #layer[el16_pmay = 'PSOE']{polygon-fill: #FF0000;} #layer[el16_pmay = 'MAREAS']{polygon-fill: #C500FF;} #layer[el16_pmay = 'BNG'] {polygon-fill: #004DA8;}",
-                            interactivity: ['ds_prov']
-                        });
-                        $('#legend1').hide();
-                        $('#legend2').hide();
-                        $('#legend3').hide();
-                        $('#legend4').show();
-                    return true;
-                }
-            };
+                          Capa2: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([ind_tparo], (#d3f2a3,#97e196,#39ab7e,#0d8f81,#245668), quantiles); line-width: 0.1; line-color: #97e196; line-opacity: 0.5; polygon-opacity: 0.7 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
 
-            $('#thematic button').click(function() {
-                $('#thematic button').removeClass('active')
-                $(this).addClass('active');
-                $('#legend').hide();
-                LayerActionsA[$(this).attr('id')]();
-            });
+                          $('#legend1').hide();
+                          $('#legend2').show();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+              						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
 
-            var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['ds_prov', 'ds_muni', 'ds_comarca', 'ds_concello']);
+                          return true;
 
-            // get average concerns and then load graphs
+                                     },
+                          Capa3: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.7; line-color: #D3D3D3; line-width: 0.5; line-opacity: 1;}#layer[t_pob_joven = 'Ancianos']{polygon-fill:#573b88} #layer[t_pob_joven = 'Adultos']{polygon-fill:#63589f} #layer[t_pob_joven = 'Jóvenes']{polygon-fill:#b998dd} #layer[t_pob_joven = 'Muy jóvenes']{polygon-fill:#e4c7f1;}",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').show();
+                          $('#legend4').hide();
+              						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
 
-            sql.execute('select avg(pre_paro) as pre_paro ,avg(pre_sani) as pre_sani ,avg(pre_edu) as pre_edu ,avg(pre_econom) as pre_econom ,avg(pre_empleoq) as pre_empleoq ,avg(pre_despobl) as pre_despobl ,avg(pre_incendio) as pre_incendio from {{table_name}}', {table_name: table_name})
-            .done(function(data){
-                if (data.rows){
-                    concern_averages = data.rows[0]
-                    refreshGraph();
+                          return true;
 
-                    // Click on the first layer
-                    $('#Capa1').click();
-                };
-            })
+                                     },
+                          Capa4: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer {polygon-fill: #FFFFB2; polygon-opacity: 0.7; line-color: #D3D3D3; line-width: 0.5; line-opacity: 0.8;} #layer[mayoria_16 = 'PP']{polygon-fill: #1d91c0;} #layer[mayoria_16 = 'PSOE']{polygon-fill: #FF0000;} #layer[mayoria_16 = 'MAREAS']{polygon-fill: #C500FF;} #layer[mayoria_16 = 'BNG'] {polygon-fill: #004DA8;}",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').show();
+              						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
+                     		return true;
+                          },
+  				        Capa5: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([p_paro], (#c6dbef,#9ecae1,#6baed6,#4292c6,#084594), quantiles); line-width: 0.1; line-color:  #c6dbef; line-opacity: 0.5; polygon-opacity: 0.7 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+               						$('#legend5').show();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
+                          return true;
+  						},
+  						Capa6: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([p_sanidad], (#fee391,#fec44f,#fe9929,#fc8d59,#ff7f00;), quantiles); line-width: 0.1; line-color: #bfd3e6; line-opacity: 0.5; polygon-opacity: 0.7 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+               						$('#legend5').hide();
+              						$('#legend6').show();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
+                          return true;
+  						},
+  						Capa7: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([p_educacion], (#d9f0a3,#addd8e,#78c679,#41ab5d,#005a32), quantiles); line-width: 0.1; line-color: #41ab5d; line-opacity: 0.5; polygon-opacity: 0.7 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+               						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').show();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
+                          return true;
+  						},
+  						Capa8: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([p_economia], (#ffdd9a,#F5B869,#F57A40,#F53D36,#F50024), quantiles); line-width: 0.1; line-color: #97e196; line-opacity: 0.5; polygon-opacity: 0.7 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+               						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').show();
+              						$('#legend9').hide();
+              						$('#legend10').hide();
+                          return true;
+  						},
+  						Capa9: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([p_empleo], (#9ebcda,#8c96c6,#8c6bb1,#88419d,#6e016b), quantiles); line-width: 0.1; line-color: #fdd49e; line-opacity: 0.5; polygon-opacity: 0.7 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+               						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').show();
+              						$('#legend10').hide();
+                          return true;
+  						},
+  				  		Capa10: function() {
+                          sublayer.set({
+                            sql: "SELECT * FROM test_data_2" + getGeoFilter(),
+                              cartocss: "#layer { polygon-fill: ramp([p_despoblacion], (#fee391,#fec44f,#fe9929,#cc4c02,#8c2d04), quantiles); line-width: 0.1; line-color:  #fee391; line-opacity: 0.5; polygon-opacity: 0.6 }",
+                              interactivity: ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','ind_paro_juvenil','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio']
+                          });
+                          $('#legend1').hide();
+                          $('#legend2').hide();
+                          $('#legend3').hide();
+                          $('#legend4').hide();
+               						$('#legend5').hide();
+              						$('#legend6').hide();
+              						$('#legend7').hide();
+              						$('#legend8').hide();
+              						$('#legend9').hide();
+              						$('#legend10').show();
+                          return true;
+
+                  }
+              };
+
+              $('#thematic button').click(function() {
+                  $('#thematic button').removeClass('active')
+                  $(this).addClass('active');
+                  $('#legend').hide();
+                  LayerActionsA[$(this).attr('id')]();
+              });
+
+
+              var infowindow0 = cdb.vis.Vis.addInfowindow(map, layer.getSubLayer(0), ['seccion','provincia','municipio','t_pob_joven','mayoria_16','ind_tparo','ind_confianza','p_paro','p_sanidad','p_educacion','p_economia','p_empleo','p_despoblacion','p_incendio'],{infowindowTemplate: $('#infowindow_template').html()});
+
+              // get average concerns and then load graphs
+
+              sql.execute('select avg(p_paro) as p_paro ,avg(p_sanidad) as p_sanidad ,avg(p_educacion) as p_educacion ,avg(p_economia) as p_economia ,avg(p_empleo) as p_empleo ,avg(p_despoblacion) as p_despoblacion ,avg(p_incendio) as p_incendio from {{table_name}}', {table_name: table_name})
+              .done(function(data){
+                  if (data.rows){
+                      concern_averages = data.rows[0]
+                      refreshGraph();
+
+                      // Click on the first layer
+                      $('#Capa1').click();
+                  };
+              })
+          });
+          // Fin de la carga del mapa;
+          torque_layer.addTo(map,3).addTo(map)
+          .done(function(layer){
+        var torqueLayer = layer;
+        torqueLayer.stop(); // everytime that the map is reloaded, the torque layer is stopped, the animation won't start
+                            // unless you click the "play" button.
+        torqueLayer.getStep(0); // everytime that the map is reloaded, it restarts the animatio
+          });
         });
-        // Fin de la carga del mapa
+
 
 
           /* Control del municipio */
         var update_municipality_selector = function () {
             $("#municipality_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select ds_muni from {{table_name}} " + getGeoFilter() + " group by ds_muni order by ds_muni", {table_name: table_name})
+            sql.execute("select municipio from {{table_name}} " + getGeoFilter() + " group by municipio order by municipio", {table_name: table_name})
             .done(function (data) {
                 municipalities = [];
                 for (var i = 0; i < data.rows.length; i++) {
-                    municipalities.push(data.rows[i].ds_muni);
-                    $("#municipality_selector").append('<option value="' + data.rows[i].ds_muni + '">' + data.rows[i].ds_muni + '</option>');
+                    municipalities.push(data.rows[i].municipio);
+                    $("#municipality_selector").append('<option value="' + data.rows[i].municipio + '">' + data.rows[i].municipio + '</option>');
                 }
             })
             .error(function(errors) {
@@ -481,12 +1000,12 @@
         var update_poblacion_selector = function () {
             $("#poblacion_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select pb_esjoven from {{table_name}} " + getGeoFilter() + " group by pb_esjoven order by pb_esjoven", {table_name: table_name})
+            sql.execute("select t_pob_joven from {{table_name}} " + getGeoFilter() + " group by t_pob_joven order by t_pob_joven", {table_name: table_name})
             .done(function (data) {
                 poblacion = [];
                 for (var i = 0; i < data.rows.length; i++) {
-                    poblacion.push(data.rows[i].pb_esjoven);
-                    $("#poblacion_selector").append('<option value="' + data.rows[i].pb_esjoven + '">' + data.rows[i].pb_esjoven + '</option>');
+                    poblacion.push(data.rows[i].t_pob_joven);
+                    $("#poblacion_selector").append('<option value="' + data.rows[i].t_pob_joven + '">' + data.rows[i].t_pob_joven + '</option>');
                 }
             })
             .error(function(errors) {
@@ -498,12 +1017,12 @@
          var update_vulnera_selector = function () {
             $("#vulnera_selector").html('<option value="Todos">Todos</option>');
 
-            sql.execute("select vulne1 from {{table_name}} " + getGeoFilter() + " group by vulne1 order by vulne1", {table_name: table_name})
+            sql.execute("select ind_vulnerabilidad from {{table_name}} " + getGeoFilter() + " group by ind_vulnerabilidad order by ind_vulnerabilidad", {table_name: table_name})
             .done(function (data) {
                 vulnera = [];
                 for (var i = 0; i < data.rows.length; i++) {
-                    vulnera.push(data.rows[i].vulne1);
-                    $("#vulnera_selector").append('<option value="' + data.rows[i].vulne1 + '">' + data.rows[i].vulne1 + '</option>');
+                    vulnera.push(data.rows[i].ind_vulnerabilidad);
+                    $("#vulnera_selector").append('<option value="' + data.rows[i].ind_vulnerabilidad + '">' + data.rows[i].ind_vulnerabilidad + '</option>');
                 }
             })
             .error(function(errors) {
@@ -511,11 +1030,11 @@
             });
         };
         /* CARGA DEL SELECTOR DE PROVINCIAS */
-        sql.execute("select ds_prov from {{table_name}} group by ds_prov order by ds_prov", {table_name: table_name})
+        sql.execute("select provincia from {{table_name}} group by provincia order by provincia", {table_name: table_name})
         .done(function (data) {
             for (var i = 0; i < data.rows.length; i++) {
-                provinces.push(data.rows[i].ds_prov);
-                $("#province_selector").append('<option value="' + data.rows[i].ds_prov + '">' + data.rows[i].ds_prov + '</option>');
+                provinces.push(data.rows[i].provincia);
+                $("#province_selector").append('<option value="' + data.rows[i].provincia + '">' + data.rows[i].provincia + '</option>');
             }
 
         })
@@ -535,9 +1054,9 @@
         $('#province_selector').change(function() {
             var province = $(this).val();
             if (province == "A Coruña','Lugo','Pontevedra','Ourense") {
-                geo_filter['ds_prov'] = false;
+                geo_filter['provincia'] = false;
             } else {
-                geo_filter['ds_prov'] = province;
+                geo_filter['provincia'] = province;
             }
             refresh();
             update_municipality_selector();
@@ -547,9 +1066,9 @@
         $('#municipality_selector').change(function() {
             var municipality = $(this).val();
             if (municipality == "Todos") {
-                geo_filter['ds_muni'] = false;
+                geo_filter['municipio'] = false;
             } else {
-                geo_filter['ds_muni'] =  municipality;
+                geo_filter['municipio'] =  municipality;
             }
             refresh();
         });
@@ -557,9 +1076,9 @@
         $('#poblacion_selector').change(function() {
             var poblacion = $(this).val();
             if (poblacion == "Todos") {
-                geo_filter['pb_esjoven'] = false;
+                geo_filter['t_pob_joven'] = false;
             } else {
-                geo_filter['pb_esjoven'] = poblacion;
+                geo_filter['t_pob_joven'] = poblacion;
             }
             refresh();
         });
@@ -567,14 +1086,68 @@
          $('#vulnera_selector').change(function() {
             var vulnera = $(this).val();
             if (vulnera == "Todos") {
-                geo_filter['vulne1'] = false;
+                geo_filter['ind_vulnerabilidad'] = false;
             } else {
-                geo_filter['vulne1'] = vulnera;
+                geo_filter['ind_vulnerabilidad'] = vulnera;
             }
             refresh();
         });
-    </script>
 
+		// window.onload = main;
+    </script>
+			<script type="infowindow_ligh" id="infowindow_template">
+
+      <div class="infowindow-custom">
+	  <a href="#close" class="cartodb-popup-close-button close">x</a>
+          	    <div class="content" style="background-color:white;padding:20px">
+				 <div style="width: 300px; height:100px; background-color:#2C3539">
+ 	        	 	<h4 style="margin-top:0px; padding:20px; text-align:center; color:white; font-weight: normal; text-transform: none; font-size: 20px">{{municipio}},<br> {{provincia}},<br> Sección:{{seccion}}</h4>
+				 </div>
+				    <h4 style="color:black;font-size:18px; font-weight:bold;">Indicadores</h4>
+				    <p style="color:black;font-size:15px; font-weight:bold;">Confianza Ciudadano: {{content.data.ind_confianza}}</p>
+               		<p style="color:black;font-size:15px; font-weight:bold;">Tasa de paro: {{content.data.ind_tparo}} % </p>
+					<p style="color:black;font-size:15px; font-weight:bold;">Tipo de Población: {{content.data.t_pob_joven}}</p>
+           		    <h4 style="color:black;font-size:18px; font-weight:bold;">Preocupaciones</h4>
+             <TABLE style="width: 300px;">
+	            <TR>
+		        <TD style="color:black;font-size:15px; font-weight:bold;">Paro: </TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_paro}}</TD>
+				<TD>&nbsp;  </TD>
+				<TD>&nbsp;  </TD>
+				<TD style="color:black;font-size:15px;">Sanidad:</TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_sanidad}}</TD>
+				</TR>
+	            <TR>
+		        <TD style="color:black;font-size:15px; font-weight:bold;">Educación: </TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_educacion}}</TD>
+				<TD>&nbsp;  </TD>
+				<TD>&nbsp;  </TD>
+				<TD style="color:black;font-size:15px; font-weight:bold;">Economía: </TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_economia}}</TD>
+				</TR>
+				<TR>
+		        <TD style="color:black;font-size:15px; font-weight:bold;">Empleo: </TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_empleo}}</TD>
+				<TD>&nbsp;  </TD>
+				<TD>&nbsp;  </TD>
+ 				<TD style="color:black;font-size:15px; font-weight:bold;">Despoblación: </TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_despoblacion}}</TD>
+				</TR>
+				<TR>
+		        <TD style="color:black;font-size:15px; font-weight:bold;">Incendios: </TD>
+				<TD style="color:black;font-size:14px;">{{content.data.p_incendio}}</TD>
+				</TR>
+                </TABLE>
+
+
+
+
+       		 	 </div>
+				    <div class="cartodb-popup-tip-container"></div>
+			     </div>
+
+
+    </script>
 
     </body>
 </html>
